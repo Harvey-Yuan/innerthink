@@ -1,0 +1,11 @@
+[project]
+name = "innerthink"
+version = "0.1.0"
+description = "Local EverOS memory layer hosting for InnerThink"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+    "everos",
+]
+
+[tool.uv]
+package = false

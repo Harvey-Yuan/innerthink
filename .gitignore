@@ -1,0 +1,20 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Secrets
+.env
+
+# EverOS local memory (runtime files under data/everos/ are ignored)
+data/everos/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
