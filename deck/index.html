@@ -88,11 +88,22 @@ body{
   font-family:var(--mono); font-size:max(8.5px, calc(10.5 * var(--u)));
   letter-spacing:.06em; color:var(--graphite-2); line-height:1.5;
 }
+.slide-head{ display:flex; justify-content:space-between; align-items:flex-end; gap:calc(40 * var(--u)); }
 
 /* reveal helper */
 .rv{ opacity:0; transform:translateY(calc(14 * var(--u))); }
 .is-active .rv{ animation:rv .7s cubic-bezier(.2,.7,.2,1) forwards; }
 @keyframes rv{ to{ opacity:1; transform:none; } }
+
+.replay{
+  font-family:var(--mono); font-size:max(8.5px, calc(10.5 * var(--u)));
+  letter-spacing:.16em; text-transform:uppercase; white-space:nowrap;
+  background:none; border:1px solid var(--hair); color:var(--graphite);
+  padding:calc(8 * var(--u)) calc(14 * var(--u)); cursor:pointer;
+  transition:border-color .2s, color .2s;
+}
+.replay:hover{ border-color:var(--ink); color:var(--ink); }
+.replay:focus-visible{ outline:2px solid var(--sig); outline-offset:2px; }
 
 /* ═══════════ 01 · IDENTITY ═══════════════════════════════════ */
 .s1-cols{
@@ -149,210 +160,206 @@ body{
 }
 .s1-strip b{ color:var(--ink); font-weight:600; }
 
-/* ═══════════ 02 · MECHANISM ══════════════════════════════════ */
-.s2-head{
-  display:grid; grid-template-columns:minmax(0,1fr) minmax(0,28%);
-  gap:calc(48 * var(--u)); align-items:end;
+/* ═══════════ 02 · THE TOKEN BILL ═════════════════════════════ */
+.chat-grid{
+  flex:1 1 auto; min-height:0; display:flex; gap:0;
+  margin-top:calc(20 * var(--u)); transition:gap .8s cubic-bezier(.2,.8,.2,1);
 }
-.s2-head .lede{ align-self:end; }
-#s2svg{ flex:1 1 auto; min-height:0; width:100%; height:100%; margin-top:calc(18 * var(--u)); }
-
-.sv-lbl{ font-family:var(--mono); font-size:10.5px; letter-spacing:.16em; fill:#6A7183; text-transform:uppercase; }
-.sv-lbl-d{ font-family:var(--mono); font-size:10.5px; letter-spacing:.16em; fill:var(--graphite-2); text-transform:uppercase; }
-.sv-tx{ font-family:var(--mono); font-size:12px; fill:#AFB6C6; }
-.sv-tx-d{ font-family:var(--mono); font-size:12px; fill:var(--graphite); }
-.sv-chip{ fill:#EDEEF2; stroke:var(--hair); }
-.sv-chip-t{ font-family:var(--mono); font-size:12px; fill:var(--ink); }
-.sv-wire{ stroke:var(--hair); stroke-width:1.5; fill:none; }
-.sv-wire-d{ stroke:#242C3E; stroke-width:1.5; fill:none; }
-
-#loopPath{ stroke:var(--sig); stroke-width:2; fill:none; stroke-dasharray:7 6; }
-#loopFlow{ stroke:#FF6FAE; stroke-width:2.6; fill:none; stroke-linecap:round; }
-#distLink{ stroke:var(--sig); stroke-width:1.6; stroke-dasharray:5 5; }
-
-.phase-a,.phase-b{ transition:opacity .5s ease; }
-.dim{ opacity:.2; }
-
-.s2-foot{
-  margin-top:auto; padding-top:calc(16 * var(--u));
-  display:flex; justify-content:space-between; align-items:baseline;
-  gap:calc(40 * var(--u));
+.chat-grid.split{ gap:calc(22 * var(--u)); }
+.pane{ min-width:0; display:flex; flex-direction:column; }
+.pane-std{ flex:1 1 auto; }
+.pane-it{
+  flex:0 0 0%; overflow:hidden; opacity:0;
+  transition:flex-basis .8s cubic-bezier(.2,.8,.2,1), opacity .5s ease .3s;
 }
-.s2-foot .foot{ margin-top:0; padding-top:0; }
-.s2-legend{
-  display:flex; gap:calc(26 * var(--u)); white-space:nowrap;
-  font-family:var(--mono); font-size:max(8.5px, calc(10.5 * var(--u)));
-  letter-spacing:.1em; color:var(--graphite-2); text-transform:uppercase;
+.chat-grid.split .pane-it{ flex-basis:50%; opacity:1; }
+
+/* the token counter is the point of this slide — it is set loud */
+.pane-bar{
+  display:flex; justify-content:space-between; align-items:flex-end;
+  gap:calc(16 * var(--u)); padding-bottom:calc(8 * var(--u)); white-space:nowrap;
 }
-.s2-legend i{
-  display:inline-block; width:calc(9 * var(--u)); height:calc(9 * var(--u));
-  min-width:7px; min-height:7px; margin-right:calc(7 * var(--u)); vertical-align:-1px;
+.pane-bar .who{
+  font-family:var(--mono); font-size:max(9px, calc(11 * var(--u)));
+  letter-spacing:.15em; text-transform:uppercase; padding-bottom:calc(7 * var(--u));
+  overflow:hidden; text-overflow:ellipsis;
+}
+.pane-it .pane-bar .who{ color:var(--sig); }
+.count{ display:flex; align-items:baseline; gap:calc(10 * var(--u)); }
+.count b{
+  font-family:var(--display); font-weight:600; font-size:calc(58 * var(--u));
+  line-height:.86; letter-spacing:-.035em; font-variant-numeric:tabular-nums;
+  color:var(--sig);
+}
+.count i{
+  font-style:normal; font-family:var(--mono); font-size:max(9px, calc(11 * var(--u)));
+  letter-spacing:.18em; text-transform:uppercase; color:var(--graphite-2);
+}
+.pane-it .count b{ color:var(--ink); }
+
+.pane-meter{ height:calc(5 * var(--u)); min-height:4px; background:var(--paper-lo); margin-bottom:calc(12 * var(--u)); }
+.meter-fill{ display:block; height:100%; width:0%; background:var(--sig); transition:width .18s linear; }
+.pane-it .meter-fill{ background:var(--ink); }
+
+.pane-body{
+  flex:1; min-height:0; display:flex; flex-direction:column; overflow:hidden;
+  background:var(--paper-hi); border:1px solid var(--hair);
+  padding:calc(18 * var(--u)) calc(20 * var(--u));
 }
 
-/* ═══════════ 03 · RUN ════════════════════════════════════════ */
-.s3-head{ display:flex; justify-content:space-between; align-items:flex-end; gap:calc(32 * var(--u)); }
-.prompt-card{
-  margin-top:calc(20 * var(--u)); border:1px solid var(--hair); background:var(--paper-hi);
-  padding:calc(15 * var(--u)) calc(20 * var(--u));
-  display:flex; gap:calc(18 * var(--u)); align-items:baseline;
+.turn{ display:grid; grid-template-columns:calc(76 * var(--u)) minmax(0,1fr); gap:calc(14 * var(--u)); }
+.turn + .turn{ margin-top:calc(14 * var(--u)); padding-top:calc(14 * var(--u)); border-top:1px solid var(--hair); }
+.turn .role{
+  font-family:var(--mono); font-size:max(8.5px, calc(10 * var(--u)));
+  letter-spacing:.16em; text-transform:uppercase; color:var(--graphite-2);
+  padding-top:calc(4 * var(--u));
 }
-.prompt-card .tag{
-  font-family:var(--mono); font-size:max(8.5px, calc(10.5 * var(--u)));
-  letter-spacing:.18em; color:var(--graphite-2); white-space:nowrap; text-transform:uppercase;
-}
-.prompt-card p{ margin:0; font-size:max(13px, calc(16.5 * var(--u))); line-height:1.45; }
+.turn .body{ font-size:max(12px, calc(15.5 * var(--u))); line-height:1.5; }
 
-.chambers{
-  flex:1 1 auto; min-height:0; display:grid;
-  grid-template-columns:1fr 1fr; gap:calc(22 * var(--u)); margin-top:calc(20 * var(--u));
+.think-turn{ flex:1; min-height:0; }
+.think-turn .body{
+  border-left:2px solid var(--sig); padding-left:calc(14 * var(--u));
+  font-family:var(--mono); font-size:max(10px, calc(12.5 * var(--u)));
+  line-height:1.72; color:var(--graphite); overflow:hidden; max-width:64ch;
 }
-.ch{ min-height:0; display:flex; flex-direction:column; }
-.ch-bar{ display:flex; justify-content:space-between; align-items:center; gap:calc(12 * var(--u)); padding-bottom:calc(9 * var(--u)); }
-.ch-name{ font-family:var(--mono); font-size:max(9px, calc(11 * var(--u))); letter-spacing:.15em; text-transform:uppercase; white-space:nowrap; }
-.ch-meta{ font-family:var(--mono); font-size:max(9px, calc(11 * var(--u))); letter-spacing:.06em; color:var(--graphite); white-space:nowrap; }
-.ch-meta b{ font-weight:600; color:var(--ink); font-variant-numeric:tabular-nums; }
-
-.ch-body{ flex:1; min-height:0; display:flex; flex-direction:column; overflow:hidden; }
-.ch-a .ch-body{ background:var(--paper-hi); border:1px solid var(--hair); }
-.ch-b .ch-body{ background:var(--void); padding:calc(22 * var(--u)) calc(22 * var(--u)) 0; }
-
-#streamText{
-  flex:1; min-height:0; overflow:hidden;
-  padding:calc(18 * var(--u)) calc(20 * var(--u)) 0;
-  font-family:var(--mono); font-size:max(10px, calc(13 * var(--u)));
-  line-height:1.78; color:var(--graphite);
-}
-#streamText u{ text-decoration:none; color:var(--ink); }
-#streamText::after{ content:"▍"; color:var(--sig); animation:blink 1s steps(2) infinite; }
+.think-turn .role{ color:var(--sig); }
+.think-turn .body::after{ content:"▍"; color:var(--sig); animation:blink 1s steps(2) infinite; }
+.think-turn.done .body::after{ content:""; }
 @keyframes blink{ 50%{ opacity:0 } }
-#streamText.done::after{ content:""; }
 
-#latentCanvas{ flex:1; min-height:0; width:100%; }
-.lat-axis{ display:flex; padding:calc(9 * var(--u)) 0 calc(4 * var(--u)); }
-.lat-axis span{
-  flex:1; text-align:center; font-family:var(--mono);
-  font-size:max(8px, calc(10 * var(--u))); color:#4E566A; letter-spacing:.08em;
-}
-
-.answer-slab{
-  flex:0 0 auto; height:calc(58 * var(--u)); min-height:44px;
-  display:flex; align-items:center; gap:calc(14 * var(--u)); padding:0 calc(20 * var(--u));
-  border-top:1px solid var(--hair); background:var(--paper-hi);
-  opacity:0; transform:translateY(calc(8 * var(--u)));
+.answer-line{
+  font-family:var(--display); font-size:calc(30 * var(--u)); font-weight:600;
+  letter-spacing:-.02em; opacity:0; transform:translateY(calc(6 * var(--u)));
   transition:opacity .3s ease, transform .3s ease;
 }
-.ch-b .answer-slab{
-  background:var(--void-2); border-top:1px solid var(--void-line);
-  margin:0 calc(-22 * var(--u));
+.answer-line.on{ opacity:1; transform:none; }
+.waste-tag{
+  display:inline-block; margin-left:calc(12 * var(--u)); vertical-align:middle;
+  font-family:var(--mono); font-size:max(8.5px, calc(10 * var(--u)));
+  letter-spacing:.14em; text-transform:uppercase; color:var(--sig);
+  opacity:0; transition:opacity .4s ease;
 }
-.answer-slab.on{ opacity:1; transform:none; }
-.answer-slab .k{ font-family:var(--mono); font-size:max(8.5px, calc(10.5 * var(--u))); letter-spacing:.18em; color:var(--graphite-2); text-transform:uppercase; }
-.answer-slab .v{ font-family:var(--display); font-size:calc(34 * var(--u)); font-weight:600; letter-spacing:-.02em; }
-.ch-b .answer-slab .v{ color:var(--paper-hi); }
-.answer-slab .ok{ font-family:var(--mono); font-size:max(10px, calc(12 * var(--u))); color:var(--ok); letter-spacing:.08em; }
-.ch-b .answer-slab .ok{ color:#39C48D; }
+.waste-tag.on{ opacity:1; }
+.save-tag{ color:var(--sig-deep); }
 
-.results{
-  display:grid; grid-template-columns:repeat(3,1fr) auto; gap:0; margin:calc(26 * var(--u)) 0 0;
+/* the same chat shape, but the thinking happens inside an aperture
+   and never turns into text */
+.silent-turn .body{ border-left:2px solid var(--sig-deep); padding-left:calc(14 * var(--u)); }
+.silent-turn .role{ color:var(--sig-deep); }
+.silent-box{
+  background:var(--void); padding:calc(16 * var(--u)) calc(18 * var(--u));
+  display:flex; align-items:center; gap:calc(18 * var(--u)); flex-wrap:wrap;
+}
+.silent-box .txt{
+  font-family:var(--mono); font-size:max(10px, calc(12.5 * var(--u)));
+  color:#9AA3B5; letter-spacing:.04em;
+}
+.silent-box .txt i{ font-style:normal; color:#4E566A; }
+.silent-dots{ display:flex; gap:calc(9 * var(--u)); margin-left:auto; }
+.silent-dots span{
+  width:calc(11 * var(--u)); height:calc(11 * var(--u)); min-width:8px; min-height:8px;
+  border-radius:50%; background:#1B2130; transition:background .25s ease;
+}
+.silent-note{
+  display:block; margin-top:calc(10 * var(--u));
+  font-family:var(--mono); font-size:max(9px, calc(11 * var(--u)));
+  letter-spacing:.1em; text-transform:uppercase; color:var(--graphite-2);
+}
+.silent-note b{ color:var(--sig-deep); font-weight:600; }
+
+.bill{
+  display:grid; grid-template-columns:repeat(3,1fr) auto; margin-top:calc(24 * var(--u));
   border-top:1px solid var(--ink); opacity:0; transform:translateY(calc(10 * var(--u)));
   transition:opacity .45s ease, transform .45s ease;
 }
-.results.on{ opacity:1; transform:none; }
-.results .cell{ padding:calc(13 * var(--u)) calc(22 * var(--u)) 0; border-right:1px solid var(--hair); min-width:0; }
-.results .cell:first-child{ padding-left:0; }
-.results .cell:last-child{ border-right:0; padding-right:0; text-align:right; }
-.results dt{ font-family:var(--mono); font-size:max(8px, calc(10 * var(--u))); letter-spacing:.18em; text-transform:uppercase; color:var(--graphite-2); }
-.results dd{ margin:calc(6 * var(--u)) 0 0; font-family:var(--display); font-size:calc(27 * var(--u)); font-weight:600; letter-spacing:-.02em; font-variant-numeric:tabular-nums; white-space:nowrap; }
-.results dd s{ text-decoration:none; color:var(--graphite-2); font-weight:400; }
-.results dd .ar{ color:var(--graphite-2); font-weight:400; margin:0 calc(6 * var(--u)); }
-.results .big dd{ color:var(--sig); }
+.bill.on{ opacity:1; transform:none; }
+.bill .cell{ padding:calc(13 * var(--u)) calc(22 * var(--u)) 0; border-right:1px solid var(--hair); min-width:0; }
+.bill .cell:first-child{ padding-left:0; }
+.bill .cell:last-child{ border-right:0; padding-right:0; text-align:right; }
+.bill dt{ font-family:var(--mono); font-size:max(8px, calc(10 * var(--u))); letter-spacing:.18em; text-transform:uppercase; color:var(--graphite-2); }
+.bill dd{ margin:calc(6 * var(--u)) 0 0; font-family:var(--display); font-size:calc(27 * var(--u)); font-weight:600; letter-spacing:-.02em; font-variant-numeric:tabular-nums; white-space:nowrap; }
+.bill dd s{ text-decoration:none; color:var(--graphite-2); font-weight:400; }
+.bill dd .ar{ color:var(--graphite-2); font-weight:400; margin:0 calc(6 * var(--u)); }
+.bill .big dd{ color:var(--sig); }
 
-.replay{
-  font-family:var(--mono); font-size:max(8.5px, calc(10.5 * var(--u)));
-  letter-spacing:.16em; text-transform:uppercase; white-space:nowrap;
-  background:none; border:1px solid var(--hair); color:var(--graphite);
-  padding:calc(8 * var(--u)) calc(14 * var(--u)); cursor:pointer;
-  transition:border-color .2s, color .2s;
+/* ═══════════ 03 · WHERE THE THINKING LIVES ═══════════════════ */
+.nn-grid{
+  flex:1 1 auto; min-height:0; display:grid; grid-template-columns:1fr 1px 1fr;
+  gap:calc(36 * var(--u)); margin-top:calc(18 * var(--u));
 }
-.replay:hover{ border-color:var(--ink); color:var(--ink); }
-.replay:focus-visible{ outline:2px solid var(--sig); outline-offset:2px; }
-
-/* ═══════════ 04 · SCALE ══════════════════════════════════════ */
-.s4-grid{
-  flex:1 1 auto; min-height:0; display:grid;
-  grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);
-  gap:calc(70 * var(--u)); margin-top:calc(26 * var(--u));
+.nn-divider{ width:1px; background:var(--ink); opacity:.28; }
+.nn-panel{ min-width:0; min-height:0; display:flex; flex-direction:column; }
+.nn-bar{
+  display:flex; justify-content:space-between; align-items:flex-end;
+  gap:calc(16 * var(--u)); padding-bottom:calc(8 * var(--u)); white-space:nowrap;
 }
-.s4-col{ min-width:0; display:flex; flex-direction:column; }
-
-.budget-bar{ display:flex; height:calc(64 * var(--u)); min-height:44px; border:1px solid var(--ink); overflow:hidden; }
-.budget-frozen{
-  flex:0 0 95.7%;
-  background:repeating-linear-gradient(-45deg, var(--paper-lo) 0 6px, var(--paper-hi) 6px 12px);
-  display:flex; align-items:center; padding-left:calc(16 * var(--u));
+.nn-bar .who{
   font-family:var(--mono); font-size:max(9px, calc(11 * var(--u)));
-  letter-spacing:.16em; color:var(--graphite); text-transform:uppercase;
+  letter-spacing:.15em; text-transform:uppercase; padding-bottom:calc(7 * var(--u));
+  overflow:hidden; text-overflow:ellipsis;
 }
-.budget-train{ flex:1 0 4.3%; background:linear-gradient(160deg,var(--sig-deep),var(--sig)); }
-.budget-legend{
-  display:flex; justify-content:space-between; gap:calc(16 * var(--u));
-  margin-top:calc(11 * var(--u)); font-family:var(--mono);
-  font-size:max(9.5px, calc(11.5 * var(--u))); color:var(--graphite); letter-spacing:.04em;
+.nn-panel.it .nn-bar .who{ color:var(--sig); }
+.nn-panel.it .count b{ color:var(--ink); }
+.nn-rule{ height:1px; background:var(--hair); }
+.nn-sub{
+  padding-top:calc(9 * var(--u));
+  font-family:var(--mono); font-size:max(9px, calc(11 * var(--u)));
+  letter-spacing:.04em; color:var(--graphite-2);
 }
-.budget-legend b{ color:var(--ink); font-weight:600; }
-.budget-legend .train{ color:var(--sig); }
+.nn-sub b{ color:var(--graphite); font-weight:500; }
+.nn-vec rect{ fill:url(#gVecB); }
+.nn-net{ flex:1 1 auto; min-height:0; width:100%; height:100%; }
+.nn-cap{
+  margin:0; padding-top:calc(12 * var(--u)); border-top:1px solid var(--hair);
+  font-size:max(11.5px, calc(14 * var(--u))); line-height:1.45; color:var(--graphite);
+}
+.nn-cap b{ color:var(--ink); font-weight:600; }
 
-.parts{ margin:calc(28 * var(--u)) 0 0; border-top:1px solid var(--hair); }
-.part{
-  display:grid; grid-template-columns:calc(150 * var(--u)) minmax(0,1fr);
-  gap:calc(18 * var(--u)); padding:calc(15 * var(--u)) 0;
-  border-bottom:1px solid var(--hair); align-items:baseline;
-}
-.part dt{ font-family:var(--mono); font-size:max(8.5px, calc(10.5 * var(--u))); letter-spacing:.16em; text-transform:uppercase; color:var(--graphite-2); }
-.part dd{ margin:0; font-family:var(--mono); font-size:max(10.5px, calc(13.5 * var(--u))); color:var(--ink); line-height:1.5; }
-.part dd em{ font-style:normal; color:var(--graphite); }
+.nn-node{ transition:fill .3s ease; }
+.nn-edge{ transition:stroke .25s ease, stroke-opacity .25s ease; stroke-width:1.1; fill:none; }
+.nn-lbl{ font-family:var(--mono); font-size:12px; letter-spacing:.16em; text-transform:uppercase; }
+.nn-chip rect{ fill:#EDEEF2; stroke:var(--sig); }
+.nn-chip text{ font-family:var(--mono); font-size:13px; fill:var(--ink); }
+.nn-loop{ stroke:#FF6FAE; stroke-width:3.4; fill:none; stroke-linecap:round; }
+.nn-back{ stroke:var(--sig); stroke-width:1.8; fill:none; stroke-dasharray:6 6; }
+/* the recurrence is always there — the flash only shows it firing */
+.nn-guide{ fill:none; stroke-width:1.6; stroke-dasharray:4 7; }
+.nn-guide.paper{ stroke:#B9BDC7; }
+.nn-guide.inner{ stroke:#525C7C; stroke-width:1.9; }
+.nn-guide-lbl{ font-family:var(--mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; }
 
-.slots{ flex:1; min-height:0; display:flex; flex-direction:column; border-top:1px solid var(--hair); }
-.slot{
-  flex:1; display:grid;
-  grid-template-columns:calc(26 * var(--u)) minmax(0,1fr) calc(132 * var(--u)) calc(92 * var(--u));
-  gap:calc(16 * var(--u)); align-items:center;
-  padding:calc(14 * var(--u)) 0; border-bottom:1px solid var(--hair);
-  opacity:.32; transition:opacity .45s ease;
-}
-.slot.on{ opacity:1; }
-.slot-chip{
-  width:calc(26 * var(--u)); height:calc(26 * var(--u)); min-width:18px; min-height:18px;
-  background:var(--void); position:relative;
-  transform:translateX(calc(-14 * var(--u))) scale(.6); opacity:0;
-  transition:transform .5s cubic-bezier(.2,.8,.2,1), opacity .4s ease;
-}
-.slot.on .slot-chip{ transform:none; opacity:1; }
-.slot-chip::after{ content:""; position:absolute; inset:22%; background:linear-gradient(150deg,var(--sig-deep),var(--sig)); }
-.slot-name{ font-family:var(--display); font-size:calc(22 * var(--u)); font-weight:500; letter-spacing:-.015em; }
-.slot-name small{
-  display:block; font-family:var(--mono); font-size:max(8.5px, calc(10.5 * var(--u)));
-  color:var(--graphite-2); letter-spacing:.08em; margin-top:calc(3 * var(--u)); font-weight:400;
-}
-.slot-track{ height:calc(7 * var(--u)); min-height:5px; background:var(--paper-lo); position:relative; }
-.slot-fill{ position:absolute; inset:0 100% 0 0; background:var(--ink); transition:right 1s cubic-bezier(.2,.8,.2,1); }
-.slot.on .slot-fill{ right:var(--r,40%); }
-.slot-num{ font-family:var(--mono); font-size:max(10px, calc(13 * var(--u))); text-align:right; font-variant-numeric:tabular-nums; }
-.slot-num b{ font-weight:600; }
-.slot-num s{ text-decoration:none; color:var(--graphite-2); }
-.slot.future .slot-name{ color:var(--graphite-2); }
-.slot.future .slot-chip::after{ background:repeating-linear-gradient(45deg,#3B4256 0 3px,#242A38 3px 6px); }
+/* ═══════════ 04 · HOW IT LEARNS ══════════════════════════════ */
+#trsvg{ flex:1 1 auto; min-height:0; width:100%; height:100%; margin-top:calc(14 * var(--u)); }
+.tr-lbl{ font-family:var(--mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase; fill:var(--graphite-2); }
+.tr-lbl-l{ font-family:var(--mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase; fill:#6A7183; }
+.tr-chip{ fill:#EDEEF2; stroke:var(--hair); }
+.tr-chip-t{ font-family:var(--mono); font-size:12.5px; fill:var(--ink); }
+.tr-tx{ font-family:var(--mono); font-size:12px; fill:var(--graphite); }
+.tr-wire{ stroke:var(--hair); stroke-width:1.5; fill:none; }
+.tr-branch{ transition:opacity .7s ease; }
+#trDistill, #trDistillNote, #trLinkGroup{ transition:opacity .5s ease; }
+#trLinkGroup line{ stroke:var(--sig); stroke-width:1.8; stroke-dasharray:5 5; }
+.strip-cell{ transition:fill .25s ease; }
+.strip-tick{ stroke:#FF6FAE; stroke-width:1.3; opacity:0; transition:opacity .2s ease; }
+.strip-tick.on{ opacity:1; }
+.tr-loss{ transition:opacity .4s ease; }
+#trStamp{ transition:opacity .6s ease; }
+.tr-item{ opacity:0; transition:opacity .35s ease; }
+.tr-item.on{ opacity:1; }
+.tr-note{ font-family:var(--sans); font-size:17px; font-weight:500; fill:var(--ink); }
+.tr-note.dim{ font-size:15px; font-weight:400; fill:var(--graphite); }
 
-.kicker{
-  margin-top:calc(34 * var(--u));
-  font-family:var(--display); font-size:calc(50 * var(--u));
-  font-weight:600; letter-spacing:-.028em; line-height:1.02;
+.tr-strip{
+  display:flex; flex-wrap:wrap; gap:calc(40 * var(--u)); align-items:baseline;
+  border-top:1px solid var(--hair); padding-top:calc(14 * var(--u)); margin-top:calc(18 * var(--u));
+  font-family:var(--mono); font-size:max(9.5px, calc(11.5 * var(--u)));
+  letter-spacing:.04em; color:var(--graphite-2);
 }
-.kicker span{ color:var(--graphite-2); }
+.tr-strip b{ color:var(--ink); font-weight:600; }
 
 /* ═══════════ navigation rail ═════════════════════════════════ */
 #rail{
-  position:absolute; left:var(--pad-x); right:var(--pad-x); bottom:calc(38 * var(--u)); z-index:50;
+  position:absolute; left:var(--pad-x); right:var(--pad-x); bottom:calc(46 * var(--u)); z-index:50;
   display:grid; grid-template-columns:repeat(4,1fr); gap:0;
   border-top:1px solid var(--hair);
 }
@@ -372,32 +379,36 @@ body{
 .rail-i.cur{ color:var(--ink); }
 .rail-i b{ font-weight:500; margin-right:calc(9 * var(--u)); color:inherit; }
 .rail-i:focus-visible{ outline:2px solid var(--sig); outline-offset:2px; }
-#hint{
-  position:absolute; right:var(--pad-x); bottom:calc(14 * var(--u)); z-index:50;
-  font-family:var(--mono); font-size:max(8px, calc(10 * var(--u)));
-  letter-spacing:.16em; color:var(--graphite-2);
-  text-transform:uppercase; transition:opacity .6s ease;
+#pager{
+  position:absolute; right:var(--pad-x); bottom:calc(9 * var(--u)); z-index:50;
+  display:flex; gap:calc(8 * var(--u));
 }
+.pager-b{
+  appearance:none; cursor:pointer;
+  width:calc(46 * var(--u)); height:calc(28 * var(--u));
+  min-width:36px; min-height:26px;
+  display:grid; place-items:center;
+  background:none; border:1px solid var(--hair); color:var(--graphite);
+  font-family:var(--mono); font-size:max(12px, calc(14 * var(--u))); line-height:1;
+  transition:border-color .2s ease, color .2s ease, opacity .2s ease;
+}
+.pager-b:hover:not(:disabled){ border-color:var(--ink); color:var(--ink); }
+.pager-b:disabled{ opacity:.28; cursor:default; }
+.pager-b:focus-visible{ outline:2px solid var(--sig); outline-offset:2px; }
 
 /* narrow windows: drop to a single column rather than crushing the grids */
 @media (max-width: 900px){
-  .s1-cols, .s2-head, .s4-grid{ grid-template-columns:minmax(0,1fr); }
+  .s1-cols{ grid-template-columns:minmax(0,1fr); }
   .s1-right{ display:none; }
-  .s2-head .lede{ display:none; }
-  .s4-grid{ gap:calc(28 * var(--u)); }
-  .s4-col:first-child .parts{ display:none; }
-  .results{ grid-template-columns:repeat(2,1fr); }
-  .results .cell:nth-child(2){ border-right:0; }
-}
-@media (max-height: 520px){
-  .prompt-card p{ font-size:max(12px, calc(15 * var(--u))); }
-  .kicker{ font-size:calc(38 * var(--u)); }
+  .mode-card{ display:none; }
+  .bill{ grid-template-columns:repeat(2,1fr); }
+  .bill .cell:nth-child(2){ border-right:0; }
 }
 
 @media (prefers-reduced-motion: reduce){
   .rv{ opacity:1; transform:none; animation:none !important; }
   .slide{ transition:none; }
-  #streamText::after{ animation:none; }
+  .think-turn .body::after{ animation:none; }
 }
 </style>
 </head>
@@ -442,260 +453,284 @@ body{
   </div>
 </section>
 
-<!-- ═════════════ 02 · MECHANISM ═════════════ -->
+<!-- ═════════════ 02 · THE TOKEN BILL ═════════════ -->
 <section class="slide s2" data-i="1">
-  <div class="s2-head">
+  <div class="slide-head">
     <div>
-      <div class="eyebrow rv">Mechanism</div>
-      <h2 class="h2 rv" style="animation-delay:.06s">The model runs six forward passes<br>that no one ever reads.</h2>
+      <div class="eyebrow rv">The token bill</div>
+      <h2 class="h2 rv" style="animation-delay:.06s">You pay for every word it thinks.<br><em>Almost none of them are for you.</em></h2>
     </div>
-    <p class="lede rv" style="animation-delay:.12s">Each thought is the previous hidden state, projected and fed back in as the next input embedding. Training teaches those vectors to carry what the sentences used to.</p>
+    <button class="replay rv" id="replay2" style="animation-delay:.12s">Run again</button>
   </div>
 
-  <svg id="s2svg" viewBox="0 0 1408 560" preserveAspectRatio="xMidYMid meet">
+  <div class="chat-grid" id="chatGrid">
+    <!-- a normal reasoning model -->
+    <div class="pane pane-std">
+      <div class="pane-bar">
+        <span class="who">Qwen3-8B · thinking mode</span>
+        <span class="count"><b id="tokA">0</b><i>tokens</i></span>
+      </div>
+      <div class="pane-meter"><span class="meter-fill" id="meterA"></span></div>
+      <div class="pane-body">
+        <div class="turn">
+          <span class="role">You</span>
+          <span class="body">A shirt is $40 and it's 25% off. What do I pay?</span>
+        </div>
+        <div class="turn think-turn" id="thinkTurn">
+          <span class="role">Thinking</span>
+          <span class="body" id="thinkText"></span>
+        </div>
+        <div class="turn">
+          <span class="role">Reply</span>
+          <span class="body">
+            <span class="answer-line" id="ansA">$30.</span>
+            <span class="waste-tag" id="wasteTag">↑ the only part you read</span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- the same question, latent -->
+    <div class="pane pane-it">
+      <div class="pane-bar">
+        <span class="who">InnerThink · same question</span>
+        <span class="count"><b id="tokB">0</b><i>tokens</i></span>
+      </div>
+      <div class="pane-meter"><span class="meter-fill" id="meterB"></span></div>
+      <div class="pane-body">
+        <div class="turn">
+          <span class="role">You</span>
+          <span class="body">A shirt is $40 and it's 25% off. What do I pay?</span>
+        </div>
+        <div class="turn silent-turn">
+          <span class="role">Thinking</span>
+          <span class="body">
+            <span class="silent-box">
+              <span class="txt" id="silentTxt">thinking silently<i id="silentEllipsis"></i></span>
+              <span class="silent-dots" id="silentDots"></span>
+            </span>
+            <span class="silent-note">6 latent steps · <b>0 tokens decoded</b></span>
+          </span>
+        </div>
+        <div class="turn">
+          <span class="role">Reply</span>
+          <span class="body">
+            <span class="answer-line" id="ansB">$30.</span>
+            <span class="waste-tag save-tag" id="saveTag">↑ same answer, 8× cheaper</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <dl class="bill" id="bill">
+    <div class="cell"><dt>Thinking tokens</dt><dd><s id="bThink">—</s><span class="ar">→</span>0</dd></div>
+    <div class="cell"><dt>Total generated</dt><dd><s id="bTotal">—</s><span class="ar">→</span>14</dd></div>
+    <div class="cell"><dt>The answer</dt><dd>$30 <span class="ar">=</span> $30</dd></div>
+    <div class="cell big"><dt>Token bill</dt><dd id="bPct">—</dd></div>
+  </dl>
+
+  <div class="foot">Illustrative single turn. The thinking counter counts exactly the words on screen; a real Qwen3-8B trace on this question is typically longer, not shorter. Compression range for latent CoT: 3.1× (CODI, EMNLP 2025).</div>
+</section>
+
+<!-- ═════════════ 03 · WHERE THE THINKING LIVES ═════════════ -->
+<section class="slide s3" data-i="2">
+  <div class="slide-head">
+    <div>
+      <div class="eyebrow rv">Where the thinking lives</div>
+      <h2 class="h2 rv" style="animation-delay:.06s">A thought either becomes a word,<br><em>or it stays in the hidden layers.</em></h2>
+    </div>
+  </div>
+
+  <div class="nn-grid">
+    <!-- the ordinary loop: out through the output layer, back in as words -->
+    <div class="nn-panel rv" style="animation-delay:.14s">
+      <div class="nn-bar">
+        <span class="who">Every other LLM · explicit CoT</span>
+        <span class="count"><b id="countA">0</b><i>reasoning tokens</i></span>
+      </div>
+      <div class="nn-rule"></div>
+      <div class="nn-sub"><b>3 reasoning steps</b> · 27 tokens decoded, emitted, and read back in</div>
+      <svg class="nn-net" id="netA" viewBox="0 0 680 470" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <marker id="arrA" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 z" fill="#E8237E"/>
+          </marker>
+        </defs>
+        <path class="nn-guide paper" d="M 618,184 C 690,20 20,12 62,130"/>
+        <text class="nn-guide-lbl" x="340" y="30" text-anchor="middle" style="fill:#9CA2AF">decoded into words, fed back in</text>
+        <g class="edges"></g>
+        <g class="nodes"></g>
+        <text class="nn-lbl" x="64"  y="440" text-anchor="middle" style="fill:#8B909B">Question</text>
+        <text class="nn-lbl" x="616" y="440" text-anchor="middle" style="fill:#8B909B">Answer</text>
+        <path class="nn-back" id="backA" d="M 618,184 C 690,20 20,12 62,130" opacity="0" marker-end="url(#arrA)"/>
+        <g class="nn-chip" id="chipA" opacity="0">
+          <rect x="-60" y="-16" width="120" height="32" rx="2"/>
+          <text x="0" y="5" text-anchor="middle">40 / 4 = 10</text>
+        </g>
+      </svg>
+      <p class="nn-cap">Every step <b>leaves the network</b>, is decoded into words, and is fed back in as input. You are billed for each one.</p>
+    </div>
+
+    <div class="nn-divider"></div>
+
+    <!-- the latent loop: it never leaves the hidden layers -->
+    <div class="nn-panel it rv" style="animation-delay:.2s">
+      <div class="nn-bar">
+        <span class="who">InnerThink · latent CoT</span>
+        <span class="count"><b id="countB">0</b><i>reasoning tokens</i></span>
+      </div>
+      <div class="nn-rule"></div>
+      <div class="nn-sub"><b>3 reasoning steps</b> · 3 forward passes, 0 tokens decoded</div>
+      <svg class="nn-net" id="netB" viewBox="0 0 680 470" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <linearGradient id="gInB" gradientUnits="userSpaceOnUse" x1="64" y1="0" x2="214" y2="0">
+            <stop offset="0" stop-color="#C4C7D0"/><stop offset="1" stop-color="#2A3348"/>
+          </linearGradient>
+          <linearGradient id="gOutB" gradientUnits="userSpaceOnUse" x1="466" y1="0" x2="616" y2="0">
+            <stop offset="0" stop-color="#2A3348"/><stop offset="1" stop-color="#C4C7D0"/>
+          </linearGradient>
+          <marker id="arrB" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 z" fill="#FF6FAE"/>
+          </marker>
+          <linearGradient id="gVecB" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#2B2AD9"/><stop offset="1" stop-color="#FF3D87"/>
+          </linearGradient>
+        </defs>
+        <g class="edges-in"></g>
+        <rect x="170" y="104" width="352" height="350" rx="3" fill="#07080D"/>
+        <text class="nn-lbl" x="186" y="126" style="fill:#6A7183">Hidden layers</text>
+        <g class="edges"></g>
+        <g class="edges-out"></g>
+        <g class="nodes"></g>
+        <path class="nn-guide inner" d="M 486,390 C 545,445 260,445 214,412"/>
+        <text class="nn-lbl" x="64"  y="440" text-anchor="middle" style="fill:#8B909B">Question</text>
+        <text class="nn-lbl" x="616" y="440" text-anchor="middle" style="fill:#8B909B">Answer</text>
+        <path class="nn-loop" id="loopB" d="M 486,390 C 545,445 260,445 214,412" opacity="0" marker-end="url(#arrB)"/>
+        <g class="nn-vec" id="vecB" opacity="0">
+          <rect x="-34" y="-13" width="68" height="26" rx="13"/>
+        </g>
+      </svg>
+      <p class="nn-cap">The last hidden layer loops <b>straight back to the first</b>. The forward passes still cost compute — they just never cost a token.</p>
+    </div>
+  </div>
+
+  <div class="foot">Five layers stand in for 36 and three reasoning steps for six: CODI-Qwen3-8B runs six latent steps through the full transformer stack, with the recurrence being the last hidden state projected through a 2-layer MLP + LayerNorm. Counts are reasoning tokens only, at ~9 per illustrated step — both sides still emit the answer, and a latent step still costs a forward pass. What it does not cost is a token.</div>
+</section>
+
+<!-- ═════════════ 04 · HOW IT LEARNS ═════════════ -->
+<section class="slide s4" data-i="3">
+  <div class="slide-head">
+    <div>
+      <div class="eyebrow rv">How it learns</div>
+      <h2 class="h2 rv" style="animation-delay:.06s">The words teach the vectors.<br><em>Then the words are thrown away.</em></h2>
+    </div>
+    <p class="lede rv" style="animation-delay:.12s; max-width:38ch">Self-distillation: one network runs both tasks. The student never copies the teacher's words — it copies what those words did to the network inside.</p>
+  </div>
+
+  <svg id="trsvg" viewBox="0 0 1408 520" preserveAspectRatio="xMidYMid meet">
     <defs>
-      <marker id="ah" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+      <marker id="tah" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
         <path d="M0,0 L7,3.5 L0,7 z" fill="#C4C7D0"/>
       </marker>
-      <marker id="ahd" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
-        <path d="M0,0 L7,3.5 L0,7 z" fill="#2E374C"/>
-      </marker>
-      <marker id="ahs" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <marker id="tas" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
         <path d="M0,0 L8,4 L0,8 z" fill="#E8237E"/>
       </marker>
     </defs>
 
-    <!-- ───── phase A : inference ───── -->
-    <g class="phase-a">
-      <!-- question -->
-      <g transform="translate(0,110)">
-        <text class="sv-lbl-d" x="0" y="-14">Question</text>
-        <rect class="sv-chip" x="0" y="0" width="176" height="112" rx="2"/>
-        <rect x="16" y="20" width="126" height="7" fill="#C4C7D0"/>
-        <rect x="16" y="38" width="144" height="7" fill="#C4C7D0"/>
-        <rect x="16" y="56" width="98"  height="7" fill="#C4C7D0"/>
-        <rect x="16" y="74" width="132" height="7" fill="#C4C7D0"/>
+    <!-- shared network -->
+    <text class="tr-lbl" x="0" y="232">One network</text>
+    <text class="tr-lbl" x="0" y="252" style="fill:#B4B9C4">shared weights</text>
+    <rect x="0" y="270" width="150" height="96" rx="3" fill="#07080D"/>
+    <g id="trLayers" fill="#1E2536"></g>
+    <rect id="trPulse" x="6" y="352" width="138" height="6" fill="#E8237E" opacity="0"/>
+
+    <path class="tr-wire" d="M156,300 C 200,300 200,140 246,140" marker-end="url(#tah)"/>
+    <path class="tr-wire" d="M156,336 C 200,336 200,400 246,400" marker-end="url(#tah)"/>
+
+    <!-- teacher branch: writes the reasoning out in words -->
+    <g class="tr-branch" id="trTeacher">
+      <text class="tr-lbl tr-item" x="256" y="106">Teacher task · explicit CoT</text>
+      <g transform="translate(256,122)">
+        <g class="tr-item"><rect class="tr-chip" x="0"   y="0" width="104" height="36" rx="2"/><text class="tr-chip-t" x="52"  y="23" text-anchor="middle">question</text></g>
+        <g class="tr-item"><rect class="tr-chip" x="116" y="0" width="126" height="36" rx="2"/><text class="tr-chip-t" x="179" y="23" text-anchor="middle">40 / 4 = 10</text></g>
+        <g class="tr-item"><rect class="tr-chip" x="254" y="0" width="142" height="36" rx="2"/><text class="tr-chip-t" x="325" y="23" text-anchor="middle">40 − 10 = 30</text></g>
+        <g class="tr-item"><rect class="tr-chip" x="408" y="0" width="152" height="36" rx="2"/><text class="tr-chip-t" x="484" y="23" text-anchor="middle">the answer is</text></g>
+        <g class="tr-item"><rect id="trMarkT" x="572" y="0" width="32" height="36" rx="2" fill="#FFFFFF" stroke="#E8237E" stroke-width="1.8"/><text class="tr-chip-t" x="588" y="23" text-anchor="middle">:</text></g>
+        <g class="tr-item"><rect class="tr-chip" x="616" y="0" width="66" height="36" rx="2"/><text class="tr-chip-t" x="649" y="23" text-anchor="middle">$30</text></g>
       </g>
-      <path class="sv-wire" d="M182,166 H206" marker-end="url(#ah)"/>
-
-      <!-- aperture -->
-      <rect x="212" y="20" width="968" height="310" rx="3" fill="#07080D"/>
-      <text class="sv-lbl" x="232" y="46">Inference · nothing is decoded</text>
-
-      <!-- bot token -->
-      <g transform="translate(236,148)">
-        <rect x="0" y="0" width="52" height="36" rx="2" fill="#141A26" stroke="#242C3E"/>
-        <text class="sv-tx" x="26" y="23" text-anchor="middle" font-size="11">⟨bot⟩</text>
-      </g>
-      <path class="sv-wire-d" d="M292,166 H316" marker-end="url(#ahd)"/>
-
-      <!-- transformer stack -->
-      <g id="stack">
-        <rect x="322" y="72" width="132" height="178" rx="3" fill="#0F131C" stroke="#242C3E"/>
-        <g id="layers" fill="#1E2536"></g>
-        <rect id="pulse" x="326" y="238" width="124" height="8" fill="#E8237E" opacity="0"/>
-        <text class="sv-lbl" x="388" y="270" text-anchor="middle">Qwen3-8B · 36 layers</text>
-      </g>
-
-      <!-- hidden state -->
-      <path class="sv-wire-d" d="M456,92 H494" marker-end="url(#ahd)"/>
-      <circle id="hDot" cx="500" cy="92" r="5.5" fill="#FF6FAE" opacity="0"/>
-      <text class="sv-tx" x="512" y="80" font-size="11">h — last hidden state</text>
-
-      <!-- projection -->
-      <g transform="translate(512,104)">
-        <rect x="0" y="0" width="150" height="52" rx="2" fill="#141A26" stroke="#242C3E"/>
-        <text class="sv-tx" x="75" y="22" text-anchor="middle" font-size="11">2-layer MLP</text>
-        <text class="sv-lbl" x="75" y="39" text-anchor="middle">+ LayerNorm</text>
-      </g>
-
-      <!-- the recurrence -->
-      <path id="loopPath" d="M587,156 V292 H300 V230 H314" stroke-linejoin="round" marker-end="url(#ahs)"/>
-      <path id="loopFlow" d="M587,156 V292 H300 V230 H314" stroke-linejoin="round" opacity="0"/>
-      <text class="sv-lbl" x="444" y="310" text-anchor="middle" fill="#8A93A8">fed back in as the next input embedding</text>
-
-      <!-- step counter -->
-      <text id="stepTxt" class="sv-tx" x="700" y="60" font-size="12" fill="#FF6FAE">thought 1 / 6</text>
-
-      <!-- latent field -->
-      <g id="latentGrid" transform="translate(700,72)"></g>
-      <g id="latentAxis" transform="translate(700,296)"></g>
-
-      <!-- exit -->
-      <path class="sv-wire" d="M1186,166 H1216" marker-end="url(#ah)"/>
-      <g transform="translate(1222,148)">
-        <rect class="sv-chip" x="0" y="0" width="54" height="36" rx="2"/>
-        <text class="sv-chip-t" x="27" y="23" text-anchor="middle" font-size="11">⟨eot⟩</text>
-      </g>
-      <text class="sv-lbl-d" x="1292" y="128">Answer</text>
-      <text id="ansTxt" x="1292" y="188" font-family="Bricolage Grotesque, Archivo, sans-serif" font-size="54" font-weight="700" fill="#0E1015" opacity="0">72</text>
+      <text class="tr-tx tr-item" x="256" y="192" font-size="11.5" style="fill:#8B909B">cross-entropy on every word · 27 tokens of reasoning</text>
     </g>
 
-    <!-- ───── phase B : training ───── -->
-    <g class="phase-b">
-      <text class="sv-lbl-d" x="0" y="392">Training · self-distillation · one network, two branches</text>
-
-      <!-- teacher -->
-      <text class="sv-lbl-d" x="0" y="442" fill="#8B909B">Teacher</text>
-      <g transform="translate(88,420)">
-        <rect class="sv-chip" x="0"   y="0" width="96"  height="34" rx="2"/><text class="sv-chip-t" x="48"  y="22" text-anchor="middle">question</text>
-        <rect class="sv-chip" x="106" y="0" width="126" height="34" rx="2"/><text class="sv-chip-t" x="169" y="22" text-anchor="middle">48 / 2 = 24</text>
-        <rect class="sv-chip" x="242" y="0" width="142" height="34" rx="2"/><text class="sv-chip-t" x="313" y="22" text-anchor="middle">48 + 24 = 72</text>
-        <rect class="sv-chip" x="394" y="0" width="150" height="34" rx="2"/><text class="sv-chip-t" x="469" y="22" text-anchor="middle">the answer is</text>
-        <rect x="554" y="0" width="30" height="34" rx="2" fill="#fff" stroke="#E8237E" stroke-width="1.6"/>
-        <text class="sv-chip-t" x="569" y="22" text-anchor="middle">:</text>
-        <rect class="sv-chip" x="594" y="0" width="58" height="34" rx="2"/><text class="sv-chip-t" x="623" y="22" text-anchor="middle">72</text>
-      </g>
-
-      <!-- student -->
-      <text class="sv-lbl-d" x="0" y="522" fill="#8B909B">Student</text>
-      <g transform="translate(88,500)">
-        <rect class="sv-chip" x="0"   y="0" width="96" height="34" rx="2"/><text class="sv-chip-t" x="48" y="22" text-anchor="middle">question</text>
-        <rect x="106" y="0" width="278" height="34" rx="2" fill="#07080D"/>
-        <g id="studentDots"></g>
-        <rect class="sv-chip" x="394" y="0" width="150" height="34" rx="2"/><text class="sv-chip-t" x="469" y="22" text-anchor="middle">the answer is</text>
-        <rect x="554" y="0" width="30" height="34" rx="2" fill="#fff" stroke="#E8237E" stroke-width="1.6"/>
-        <text class="sv-chip-t" x="569" y="22" text-anchor="middle">:</text>
-        <rect class="sv-chip" x="594" y="0" width="58" height="34" rx="2"/><text class="sv-chip-t" x="623" y="22" text-anchor="middle">72</text>
-      </g>
-
-      <!-- distillation link -->
-      <line id="distLink" x1="657" y1="456" x2="657" y2="498"/>
-      <circle id="distDot" cx="657" cy="456" r="4" fill="#E8237E" opacity="0"/>
-      <text class="sv-tx-d" x="676" y="482" font-size="11.5">L1 on the normalised hidden state · stop-grad</text>
-
-      <!-- losses -->
-      <g transform="translate(1108,412)">
-        <text class="sv-lbl-d" x="0" y="0">Objective</text>
-        <g class="sv-tx-d" font-size="12.5">
-          <text x="0" y="32">ℒ<tspan font-size="10" dy="3">teacher</tspan><tspan dy="-3" fill="#8B909B">  CE on the words</tspan></text>
-          <text x="0" y="62">ℒ<tspan font-size="10" dy="3">student</tspan><tspan dy="-3" fill="#8B909B">  CE on the answer</tspan></text>
-          <text x="0" y="92">ℒ<tspan font-size="10" dy="3">distill</tspan><tspan dy="-3" fill="#8B909B">     L1 between the two</tspan></text>
+    <!-- student branch: the same question, thought in vectors -->
+    <g id="trStudent">
+      <text class="tr-lbl tr-item" x="256" y="366" style="fill:#E8237E">Student task · latent CoT</text>
+      <g transform="translate(256,382)">
+        <g class="tr-item"><rect class="tr-chip" x="0"   y="0" width="104" height="36" rx="2"/><text class="tr-chip-t" x="52" y="23" text-anchor="middle">question</text></g>
+        <g class="tr-item">
+          <rect x="116" y="0" width="280" height="36" rx="2" fill="#07080D"/>
+          <text class="tr-lbl-l" x="126" y="23" font-size="10">bot</text>
+          <g id="trDots"></g>
+          <text class="tr-lbl-l" x="372" y="23" font-size="10">eot</text>
         </g>
+        <g class="tr-item"><rect class="tr-chip" x="408" y="0" width="152" height="36" rx="2"/><text class="tr-chip-t" x="484" y="23" text-anchor="middle">the answer is</text></g>
+        <g class="tr-item"><rect id="trMarkS" x="572" y="0" width="32" height="36" rx="2" fill="#FFFFFF" stroke="#E8237E" stroke-width="1.8"/><text class="tr-chip-t" x="588" y="23" text-anchor="middle">:</text></g>
+        <g class="tr-item"><rect class="tr-chip" x="616" y="0" width="66" height="36" rx="2"/><text class="tr-chip-t" x="649" y="23" text-anchor="middle">$30</text></g>
       </g>
+      <text class="tr-tx tr-item" x="256" y="452" font-size="11.5" style="fill:#8B909B">cross-entropy on the answer only · 0 tokens of reasoning</text>
+    </g>
+
+    <!-- the distillation: not the answer, but the whole layer stack at one token -->
+    <g id="trLinkGroup" opacity="0">
+      <line id="trLink"  x1="844" y1="158" x2="844" y2="197"/>
+      <line id="trLink2" x1="844" y1="343" x2="844" y2="382"/>
+    </g>
+
+    <g id="trDistill" opacity="0">
+      <rect x="640" y="197" width="408" height="146" rx="3" fill="#07080D"/>
+      <text class="tr-lbl-l" x="656" y="217">Teacher · hidden state at this token</text>
+      <g id="stripT"></g>
+      <g id="stripTicks"></g>
+      <g id="stripS"></g>
+      <text class="tr-lbl-l" x="656"  y="321">Student</text>
+      <text class="tr-lbl-l" x="1032" y="321" text-anchor="end">layer 1 → 36</text>
+    </g>
+
+    <g id="trDistillNote" opacity="0">
+      <text class="tr-lbl" x="1080" y="221" style="fill:#E8237E">L1 at every layer</text>
+      <text class="tr-note dim" x="1080" y="251">Writing the reasoning out shifts the teacher's</text>
+      <text class="tr-note dim" x="1080" y="273">whole stack at this token. The student has to</text>
+      <text class="tr-note dim" x="1080" y="295">reproduce that shift without writing anything.</text>
+      <text class="tr-lbl" x="1080" y="329">stop-gradient on the teacher</text>
+    </g>
+
+    <!-- objective -->
+    <g transform="translate(0,396)">
+      <text class="tr-lbl" x="0" y="0">Objective</text>
+      <g class="tr-tx" font-size="12.5">
+        <text class="tr-loss" id="loss1" x="0" y="28" opacity=".18">ℒ<tspan font-size="10" dy="3">teacher</tspan><tspan dy="-3" style="fill:#8B909B">  CE on the words</tspan></text>
+        <text class="tr-loss" id="loss2" x="0" y="56" opacity=".18">ℒ<tspan font-size="10" dy="3">student</tspan><tspan dy="-3" style="fill:#8B909B">  CE on the answer</tspan></text>
+        <text class="tr-loss" id="loss3" x="0" y="84" opacity=".18">ℒ<tspan font-size="10" dy="3">distill</tspan><tspan dy="-3" style="fill:#8B909B">  L1 across all layers</tspan></text>
+      </g>
+    </g>
+
+    <!-- last beat: what survives training -->
+    <g id="trStamp" opacity="0">
+      <text class="tr-lbl" x="256" y="112" style="fill:#E8237E">At inference</text>
+      <text class="tr-note" x="256" y="148">Only the student task runs.</text>
+      <text class="tr-note dim" x="256" y="176">The teacher existed to produce one hidden state for the</text>
+      <text class="tr-note dim" x="256" y="200">student to match. It is never executed when the model answers.</text>
     </g>
   </svg>
 
-  <div class="s2-foot">
-    <div class="foot">Architecture after Shen et al., <i>CODI: Compressing Chain-of-Thought into Continuous Space via Self-Distillation</i>, EMNLP 2025.</div>
-    <div class="s2-legend">
-      <span><i style="background:#E8237E"></i>latent path</span>
-      <span><i style="background:#0E1015"></i>discrete tokens</span>
-    </div>
-  </div>
-</section>
-
-<!-- ═════════════ 03 · RUN ═════════════ -->
-<section class="slide s3" data-i="2">
-  <div class="s3-head">
-    <div>
-      <div class="eyebrow rv">Side by side</div>
-      <h2 class="h2 rv" style="animation-delay:.06s">Same answer. <em>One of them shows its work.</em></h2>
-    </div>
-    <button class="replay rv" id="replay3" style="animation-delay:.12s">Run again</button>
+  <div class="tr-strip rv" style="animation-delay:.2s">
+    <span><b>LoRA r=128, α 32</b> on q,k,v,o,gate,up,down</span>
+    <span><b>0.35 B</b> trained / 8.2 B frozen</span>
+    <span><b>≈388k</b> GSM8k-Aug-NL + CommonsenseQA</span>
+    <span><b>5 epochs</b> · 8× H100 · lr 2e-4</span>
   </div>
 
-  <div class="prompt-card rv" style="animation-delay:.16s">
-    <span class="tag">GSM8K · test</span>
-    <p>Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natalia sell altogether in April and May?</p>
-  </div>
-
-  <div class="chambers">
-    <div class="ch ch-a rv" style="animation-delay:.22s">
-      <div class="ch-bar">
-        <span class="ch-name">Qwen3-8B · explicit CoT</span>
-        <span class="ch-meta"><b id="tokA">0</b> tokens &nbsp;·&nbsp; <b id="msA">0.00</b>s</span>
-      </div>
-      <div class="ch-body">
-        <div id="streamText"></div>
-        <div class="answer-slab" id="slabA">
-          <span class="k">Answer</span><span class="v">72</span><span class="ok">✓ correct</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="ch ch-b rv" style="animation-delay:.28s">
-      <div class="ch-bar">
-        <span class="ch-name" style="color:var(--sig)">InnerThink · CODI latent</span>
-        <span class="ch-meta"><b id="tokB">0</b> tokens &nbsp;·&nbsp; <b id="msB">0.00</b>s</span>
-      </div>
-      <div class="ch-body">
-        <canvas id="latentCanvas"></canvas>
-        <div class="lat-axis" id="latAxis"></div>
-        <div class="answer-slab" id="slabB">
-          <span class="k">Answer</span><span class="v">72</span><span class="ok">✓ correct</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <dl class="results" id="results3">
-    <div class="cell"><dt>Visible reasoning tokens</dt><dd><s id="rTok">—</s><span class="ar">→</span>0</dd></div>
-    <div class="cell"><dt>Wall-clock to answer</dt><dd><s>3.1s</s><span class="ar">→</span>0.9s</dd></div>
-    <div class="cell"><dt>GSM8K accuracy</dt><dd><s>49.9%</s><span class="ar">→</span>49.3%</dd></div>
-    <div class="cell big"><dt>Reasoning you have to read</dt><dd>none of it</dd></div>
-  </dl>
-
-  <div class="foot">Single-item illustration of the decode. Accuracy from the CODI-Qwen3-8B card (GSM8k: 49.3% latent vs 49.9% verbalised); speed-up within the 2.7–5.9× range reported in the CODI paper.</div>
-</section>
-
-<!-- ═════════════ 04 · SCALE ═════════════ -->
-<section class="slide s4" data-i="3">
-  <div class="eyebrow rv">Generalisation</div>
-  <h2 class="h2 rv" style="animation-delay:.06s">It isn't a model. It's an adapter you can move.</h2>
-
-  <div class="s4-grid">
-    <div class="s4-col">
-      <div class="rv" style="animation-delay:.16s">
-        <div class="budget-bar">
-          <div class="budget-frozen">Qwen3-8B — untouched</div>
-          <div class="budget-train"></div>
-        </div>
-        <div class="budget-legend"><span><b>8.2 B</b> frozen base weights</span><span class="train"><b>0.35 B</b> trained · 4.3%</span></div>
-      </div>
-
-      <dl class="parts rv" style="animation-delay:.24s">
-        <div class="part"><dt>LoRA</dt><dd>rank 128, α 32 <em>on q, k, v, o, gate, up, down</em></dd></div>
-        <div class="part"><dt>Projection</dt><dd>2-layer MLP + LayerNorm <em>— the recurrence</em></dd></div>
-        <div class="part"><dt>Data</dt><dd>GSM8k-Aug-NL + CommonsenseQA <em>≈388k</em></dd></div>
-        <div class="part"><dt>Compute</dt><dd>5 epochs, 8× H100 <em>· lr 2e-4 at 8B scale</em></dd></div>
-      </dl>
-    </div>
-
-    <div class="s4-col">
-      <div class="eyebrow rv" style="animation-delay:.3s; margin-bottom:calc(12 * var(--u))">Same recipe, different base</div>
-      <div class="slots" id="slots">
-        <div class="slot" data-r="44%">
-          <div class="slot-chip"></div>
-          <div class="slot-name">GPT-2 <small>124 M · the paper's proof</small></div>
-          <div class="slot-track"><div class="slot-fill"></div></div>
-          <div class="slot-num"><b>43.7%</b><br><s>+28.2 pts</s></div>
-        </div>
-        <div class="slot" data-r="56%">
-          <div class="slot-chip"></div>
-          <div class="slot-name">Llama-3.2 <small>1 B · instruction-tuned</small></div>
-          <div class="slot-track"><div class="slot-fill"></div></div>
-          <div class="slot-num"><b>55.6%</b><br><s>GSM8k</s></div>
-        </div>
-        <div class="slot" data-r="49%">
-          <div class="slot-chip"></div>
-          <div class="slot-name">Qwen3-8B <small>this demo · answer-only</small></div>
-          <div class="slot-track"><div class="slot-fill"></div></div>
-          <div class="slot-num"><b>49.3%</b><br><s>vs 49.9%</s></div>
-        </div>
-        <div class="slot future" data-r="0%">
-          <div class="slot-chip"></div>
-          <div class="slot-name">Your base model <small>swap the weights, keep the recipe</small></div>
-          <div class="slot-track"><div class="slot-fill"></div></div>
-          <div class="slot-num"><s>next</s></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="kicker rv" style="animation-delay:.5s">Same answers. <span>None of the words.</span></div>
-
-  <div class="foot">Rows use different GSM8k variants and training setups and are not directly comparable; each is read against its own verbalised baseline. Adapter size computed from the Qwen3-8B config (4096 hidden, 36 layers, 12288 FFN) at LoRA rank 128.</div>
+  <div class="foot">Method and figures from Shen et al., <i>CODI: Compressing Chain-of-Thought into Continuous Space via Self-Distillation</i>, EMNLP 2025, and the CODI-Qwen3-8B model card. Adapter size computed from the Qwen3-8B config at rank 128.</div>
 </section>
 
 <!-- ═════════════ rail ═════════════ -->
@@ -709,6 +744,7 @@ body{
 "use strict";
 
 const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const svgNS = "http://www.w3.org/2000/svg";
 
 /* ── the latent ramp: continuous space gets a continuous colour ─ */
 const STOPS = [
@@ -735,7 +771,6 @@ function ramp(v){
 }
 function rampCss(v){ const c = ramp(v); return "rgb("+c[0]+","+c[1]+","+c[2]+")"; }
 
-/* smooth continuous field — sums of sines, no hard cells */
 function noise(x, y, t){
   return (
     Math.sin(x*0.31 + t*0.70) * Math.sin(y*0.27 - t*0.50) +
@@ -744,7 +779,19 @@ function noise(x, y, t){
   ) / 3.1;
 }
 
-/* ── 01 · the wordmark field ───────────────────────────────── */
+/* small timer bag so leaving a slide always stops its animation */
+function Timers(){
+  const t = [];
+  return {
+    add(fn, ms){ t.push(setTimeout(fn, ms)); },
+    clear(){ t.forEach(clearTimeout); t.length = 0; }
+  };
+}
+
+/* ══ 01 · the wordmark field ═══════════════════════════════════
+   Drawn in one canvas so the two words can never drift apart: the
+   field is painted, clipped to the glyphs of INNER, then THINK is
+   set in ink on top. Reference box is the 920×452 the layout keeps. */
 const markCanvas = document.getElementById("markCanvas");
 const markCtx = markCanvas.getContext("2d");
 const OFF_W = 78, OFF_H = 40;
@@ -753,16 +800,11 @@ off.width = OFF_W; off.height = OFF_H;
 const offCtx = off.getContext("2d");
 const offImg = offCtx.createImageData(OFF_W, OFF_H);
 
-/* The wordmark is drawn in one canvas so the two words can never drift apart:
-   the field is painted, clipped to the glyphs of INNER, then THINK is set in ink
-   on top. Reference geometry is the 920×452 box the layout preserves. */
-const MARK_FONT = '800 %SIZE%px "Bricolage Grotesque", "Archivo", "Helvetica Neue", Arial, sans-serif';
 function setMarkFont(sx){
-  markCtx.font = MARK_FONT.replace("%SIZE%", (212 * sx).toFixed(2));
+  markCtx.font = '800 ' + (212 * sx).toFixed(2) + 'px "Bricolage Grotesque", "Archivo", "Helvetica Neue", Arial, sans-serif';
   try{ markCtx.letterSpacing = (-0.045 * 212 * sx).toFixed(2) + "px"; }catch(e){}
   markCtx.textBaseline = "alphabetic";
 }
-
 function drawMark(t){
   const W = markCanvas.width, H = markCanvas.height;
   if(!W || !H) return;
@@ -795,295 +837,501 @@ function drawMark(t){
   markCtx.fillText("THINK", -6 * sx, 406 * sx);
 }
 
-/* ── 03 · the six-vector heatmap ───────────────────────────── */
-const latCanvas = document.getElementById("latentCanvas");
-const latCtx = latCanvas.getContext("2d");
-const COLS = 6, ROWS = 22;
-let latActive = 0;          // how many thoughts have been computed
-let latSettled = false;
+/* ══ 02 · the token bill ══════════════════════════════════════ */
+const THINK = ("Okay, the user wants the sale price of a shirt. Original price is $40, " +
+  "discount is 25%. Let me compute 25% of 40. 25% is a quarter, so 40 / 4 = 10. So the " +
+  "discount is $10. That means the price is 40 − 10 = 30. Let me double-check by another " +
+  "route: 25% off means paying 75% of the original, and 0.75 × 40 = 30. Both agree, good. " +
+  "Should I mention sales tax? The user didn't say anything about tax, so I'll leave it out. " +
+  "Should I show the working? They asked a short question, so a short answer is probably " +
+  "best here. Final answer: $30.").split(/\s+/);
 
-function drawLatent(t){
-  const W = latCanvas.width, H = latCanvas.height;
-  if(!W || !H) return;
-  const dpr = W / Math.max(1, latCanvas.clientWidth);
-  latCtx.clearRect(0,0,W,H);
-  const gapX = 10*dpr, gapY = 2*dpr;
-  const cw = (W - gapX*(COLS-1)) / COLS;
-  const chh = (H - gapY*(ROWS-1)) / ROWS;
-  for(let c=0;c<COLS;c++){
-    const born = c < latActive;
-    const age = latActive - c;
-    const amp = born ? Math.min(1, age*0.9) : 0.045;
-    for(let r=0;r<ROWS;r++){
-      let v = noise(c*3.1, r*0.82, t + c*0.6) * 0.5 + 0.5;
-      v = 0.07 + v * amp * (latSettled ? 0.74 : 0.8);
-      latCtx.fillStyle = rampCss(v);
-      latCtx.globalAlpha = born ? 1 : 0.5;
-      latCtx.fillRect(c*(cw+gapX), r*(chh+gapY), cw, chh);
-    }
-  }
-  latCtx.globalAlpha = 1;
+const ANSWER_TOKENS = 8;          // "$30." plus the wrapper the model emits
+const LATENT_TOKENS = 6 + ANSWER_TOKENS;
+
+const thinkTurn = document.getElementById("thinkTurn");
+const thinkText = document.getElementById("thinkText");
+const meterA = document.getElementById("meterA"), meterB = document.getElementById("meterB");
+const tok2A = document.getElementById("tokA"), tok2B = document.getElementById("tokB");
+const ansA = document.getElementById("ansA"), ansB = document.getElementById("ansB");
+const wasteTag = document.getElementById("wasteTag");
+const saveTag = document.getElementById("saveTag");
+const chatGrid = document.getElementById("chatGrid");
+const bill = document.getElementById("bill");
+
+const silentTxt = document.getElementById("silentTxt");
+const silentEllipsis = document.getElementById("silentEllipsis");
+const silentDots = document.getElementById("silentDots");
+for(let i=0;i<6;i++){
+  const s = document.createElement("span");
+  s.dataset.lit = rampCss(0.30 + i*0.10);
+  silentDots.appendChild(s);
 }
+const dotEls = Array.prototype.slice.call(silentDots.children);
 
-function resizeCanvases(){
-  const q = Math.min(3, window.devicePixelRatio || 1);
-  [markCanvas, latCanvas].forEach(function(cv){
-    const w = cv.clientWidth, h = cv.clientHeight;
-    if(!w || !h) return;
-    const nw = Math.round(w * q), nh = Math.round(h * q);
-    if(cv.width !== nw || cv.height !== nh){ cv.width = nw; cv.height = nh; }
-  });
-}
-window.addEventListener("resize", resizeCanvases);
-
-/* single animation loop, only paints what is on screen */
-let T0 = null;
-function frame(ts){
-  if(T0 === null) T0 = ts;
-  const t = (ts - T0) / 1000;
-  if(cur === 0) drawMark(REDUCED ? 4 : t*0.55);
-  if(cur === 2) drawLatent(REDUCED ? 4 : t*1.9);
-  requestAnimationFrame(frame);
-}
-
-/* ── 02 · build the SVG bits, then choreograph ─────────────── */
-const svgNS = "http://www.w3.org/2000/svg";
-(function buildS2(){
-  const layers = document.getElementById("layers");
-  for(let i=0;i<13;i++){
-    const r = document.createElementNS(svgNS,"rect");
-    r.setAttribute("x", 334); r.setAttribute("y", 86 + i*12.6);
-    r.setAttribute("width", 108); r.setAttribute("height", 2);
-    layers.appendChild(r);
-  }
-  // six latent columns, drawn as SVG so they stay pinned to the diagram
-  const grid = document.getElementById("latentGrid");
-  const GW = 452, GH = 200, GC = 6, GR = 14, gx = 12, gy = 3;
-  const cw = (GW - gx*(GC-1)) / GC, ch = (GH - gy*(GR-1)) / GR;
-  for(let c=0;c<GC;c++){
-    for(let r=0;r<GR;r++){
-      const el = document.createElementNS(svgNS,"rect");
-      el.setAttribute("x", c*(cw+gx)); el.setAttribute("y", r*(ch+gy));
-      el.setAttribute("width", cw); el.setAttribute("height", ch);
-      el.setAttribute("fill", "#0C0E15");
-      el.dataset.c = c; el.dataset.r = r;
-      grid.appendChild(el);
-    }
-  }
-  const axis = document.getElementById("latentAxis");
-  for(let c=0;c<GC;c++){
-    const tx = document.createElementNS(svgNS,"text");
-    tx.setAttribute("x", c*(cw+gx) + cw/2); tx.setAttribute("y", 0);
-    tx.setAttribute("text-anchor","middle");
-    tx.setAttribute("class","sv-lbl");
-    tx.textContent = "z" + (c+1);
-    axis.appendChild(tx);
-  }
-  // student branch dots
-  const dots = document.getElementById("studentDots");
-  for(let i=0;i<6;i++){
-    const d = document.createElementNS(svgNS,"circle");
-    d.setAttribute("cx", 132 + i*38); d.setAttribute("cy", 17); d.setAttribute("r", 6);
-    d.setAttribute("fill", rampCss(0.3 + i*0.11));
-    dots.appendChild(d);
-  }
-})();
-
-const gridCells = Array.prototype.slice.call(document.querySelectorAll("#latentGrid rect"));
-const phaseA = document.querySelector(".phase-a");
-const phaseB = document.querySelector(".phase-b");
-const pulse  = document.getElementById("pulse");
-const hDot   = document.getElementById("hDot");
-const loopFlow = document.getElementById("loopFlow");
-const stepTxt = document.getElementById("stepTxt");
-const ansTxt = document.getElementById("ansTxt");
-const distDot = document.getElementById("distDot");
-
-let s2timers = [];
-function s2clear(){ s2timers.forEach(clearTimeout); s2timers = []; }
-function later(fn, ms){ s2timers.push(setTimeout(fn, ms)); }
-
-function paintGridColumn(c, level){
-  gridCells.forEach(function(el){
-    if(+el.dataset.c !== c) return;
-    const r = +el.dataset.r;
-    const v = level * (0.34 + 0.66 * (Math.sin(r*1.3 + c*2.2) * 0.5 + 0.5));
-    el.setAttribute("fill", rampCss(0.14 + v * 0.68));
-    el.style.transition = "fill .45s ease";
-  });
-}
-function resetS2(){
-  gridCells.forEach(function(el){ el.style.transition="none"; el.setAttribute("fill","#0C0E15"); });
-  pulse.setAttribute("opacity", 0);
-  hDot.setAttribute("opacity", 0);
-  loopFlow.setAttribute("opacity", 0);
-  ansTxt.setAttribute("opacity", 0);
-  distDot.setAttribute("opacity", 0);
-  stepTxt.textContent = "thought 1 / 6";
-  phaseA.classList.remove("dim");
-  phaseB.classList.add("dim");
-}
+const t2 = Timers();
+let s2raf = null;
+function s2clear(){ t2.clear(); if(s2raf) cancelAnimationFrame(s2raf); s2raf = null; }
 
 function runS2(){
-  s2clear(); resetS2();
-  if(REDUCED){
-    for(let c=0;c<6;c++) paintGridColumn(c, 0.85);
-    ansTxt.setAttribute("opacity",1); stepTxt.textContent="thought 6 / 6";
-    phaseB.classList.remove("dim");
-    return;
-  }
-  const STEP = 620;
-  for(let i=0;i<6;i++){
-    later(function(){
-      stepTxt.textContent = "thought " + (i+1) + " / 6";
-      // pulse climbs the stack
-      pulse.setAttribute("opacity", 1);
-      pulse.animate(
-        [{ transform:"translateY(0)" }, { transform:"translateY(-162px)" }],
-        { duration:340, easing:"cubic-bezier(.4,0,.2,1)", fill:"forwards" }
-      );
-    }, i*STEP);
-    later(function(){                       // hidden state pops out
-      pulse.setAttribute("opacity", 0);
-      hDot.setAttribute("opacity", 1);
-    }, i*STEP + 350);
-    later(function(){                       // projected + fed back
-      hDot.setAttribute("opacity", 0);
-      loopFlow.setAttribute("opacity", 1);
-      loopFlow.style.strokeDasharray = "30 520";
-      loopFlow.style.strokeDashoffset = "0";
-      loopFlow.animate(
-        [{ strokeDashoffset: 0 }, { strokeDashoffset: -550 }],
-        { duration: 460, easing: "cubic-bezier(.35,0,.5,1)" }
-      );
-      paintGridColumn(i, 0.85);
-    }, i*STEP + 430);
-    later(function(){ loopFlow.setAttribute("opacity", 0); }, i*STEP + 860);
-  }
-  later(function(){
-    stepTxt.textContent = "6 / 6 · done";
-    ansTxt.setAttribute("opacity", 1);
-    ansTxt.animate([{opacity:0, transform:"translateY(8px)"},{opacity:1, transform:"none"}],
-      {duration:420, easing:"cubic-bezier(.2,.8,.2,1)"});
-  }, 6*STEP + 300);
+  s2clear();
+  const N = THINK.length, TOTAL = N + ANSWER_TOKENS;
+  const pct = Math.round((1 - LATENT_TOKENS / TOTAL) * 100);
+  const times = Math.round(TOTAL / LATENT_TOKENS);
+  document.getElementById("bThink").textContent = N;
+  document.getElementById("bTotal").textContent = TOTAL;
+  document.getElementById("bPct").textContent = "−" + pct + "%";
+  saveTag.textContent = "↑ same answer, " + times + "× cheaper";
 
-  // phase B takes over
-  later(function(){
-    phaseA.classList.add("dim");
-    phaseB.classList.remove("dim");
-  }, 6*STEP + 1400);
-  later(function(){
-    distDot.setAttribute("opacity", 1);
-    distDot.animate(
-      [{ transform:"translateY(0)" }, { transform:"translateY(42px)" }],
-      { duration: 900, iterations: 3, easing: "cubic-bezier(.5,0,.5,1)" }
-    );
-  }, 6*STEP + 1800);
-  later(function(){ phaseA.classList.remove("dim"); }, 6*STEP + 5200);
-  later(runS2, 6*STEP + 7000);
-}
-
-/* ── 03 · the run ──────────────────────────────────────────── */
-const TRACE = ("Okay — Natalia sold clips to 48 friends in April. In May she sold half " +
-  "as many. Half of 48 is 24, so May is 24 clips. Let me double-check that \"half as many\" " +
-  "refers to April's 48 and not to something else — yes, it's 48 / 2 = 24. Altogether means " +
-  "April plus May, so 48 + 24. That gives 72. Verifying: 48 + 24 = 72. So the total is 72 clips.")
-  .split(/\s+/);
-
-const streamText = document.getElementById("streamText");
-const tokA = document.getElementById("tokA"), msA = document.getElementById("msA");
-const tokB = document.getElementById("tokB"), msB = document.getElementById("msB");
-const slabA = document.getElementById("slabA"), slabB = document.getElementById("slabB");
-const results3 = document.getElementById("results3");
-const latAxis = document.getElementById("latAxis");
-for(let i=0;i<6;i++){ const s=document.createElement("span"); s.textContent="z"+(i+1); latAxis.appendChild(s); }
-
-let s3raf = null, s3timers = [];
-function s3clear(){ if(s3raf) cancelAnimationFrame(s3raf); s3raf=null; s3timers.forEach(clearTimeout); s3timers=[]; }
-
-function runS3(){
-  s3clear();
-  streamText.innerHTML = "";
-  streamText.classList.remove("done");
-  document.getElementById("rTok").textContent = TRACE.length;
-  tokA.textContent = "0"; msA.textContent = "0.00";
-  tokB.textContent = "0"; msB.textContent = "0.00";
-  slabA.classList.remove("on"); slabB.classList.remove("on");
-  results3.classList.remove("on");
-  latActive = 0; latSettled = false;
-
-  const A_END = 3.10, B_END = 0.90;
-  const N = TRACE.length;
+  thinkText.innerHTML = "";
+  thinkTurn.classList.remove("done");
+  tok2A.textContent = "0"; tok2B.textContent = "0";
+  meterA.style.width = "0%"; meterB.style.width = "0%";
+  ansA.classList.remove("on"); ansB.classList.remove("on");
+  wasteTag.classList.remove("on"); saveTag.classList.remove("on");
+  bill.classList.remove("on");
+  chatGrid.classList.remove("split");
+  silentTxt.firstChild.nodeValue = "thinking silently";
+  silentEllipsis.textContent = "";
+  dotEls.forEach(function(d){ d.style.background = ""; });
 
   if(REDUCED){
-    streamText.innerHTML = TRACE.join(" ");
-    streamText.classList.add("done");
-    tokA.textContent = N + 8; msA.textContent = A_END.toFixed(2);
-    tokB.textContent = "14";  msB.textContent = B_END.toFixed(2);
-    latActive = 6; latSettled = true; drawLatent(4);
-    slabA.classList.add("on"); slabB.classList.add("on"); results3.classList.add("on");
+    thinkText.innerHTML = THINK.join(" ");
+    thinkTurn.classList.add("done");
+    tok2A.textContent = TOTAL; meterA.style.width = "100%";
+    tok2B.textContent = LATENT_TOKENS; meterB.style.width = (LATENT_TOKENS/TOTAL*100) + "%";
+    dotEls.forEach(function(d){ d.style.background = d.dataset.lit; });
+    silentTxt.firstChild.nodeValue = "thought, and said nothing about it";
+    ansA.classList.add("on"); ansB.classList.add("on");
+    wasteTag.classList.add("on"); saveTag.classList.add("on"); bill.classList.add("on");
+    chatGrid.classList.add("split");
     return;
   }
 
+  const THINK_DUR = 5.4;
   const t0 = performance.now();
-  let shown = 0, lastLatent = -1;
+  let shown = 0;
 
   function step(now){
     const el = (now - t0) / 1000;
-
-    /* explicit branch: words arrive, counter tracks exactly what is on screen */
-    const want = Math.min(N, Math.floor((el / A_END) * N));
+    const want = Math.min(N, Math.floor((el / THINK_DUR) * N));
     while(shown < want){
-      const w = TRACE[shown];
-      streamText.insertAdjacentHTML("beforeend",
-        (/72|24|48/.test(w) ? "<u>"+w+"</u> " : w + " "));
+      thinkText.insertAdjacentHTML("beforeend", THINK[shown] + " ");
       shown++;
     }
-    if(shown > 0) tokA.textContent = shown;
-    msA.textContent = Math.min(el, A_END).toFixed(2);
-
-    /* latent branch: six thoughts, then the answer */
-    const k = Math.min(6, Math.floor((el / (B_END*0.78)) * 6));
-    if(k !== lastLatent){ latActive = k; lastLatent = k; }
-    msB.textContent = Math.min(el, B_END).toFixed(2);
-
-    if(el < B_END){
-      tokB.textContent = k;
-    } else if(!slabB.classList.contains("on")){
-      latSettled = true; latActive = 6;
-      tokB.textContent = "14";
-      slabB.classList.add("on");
-    }
-    if(el >= A_END){
-      tokA.textContent = N + 8;
-      streamText.classList.add("done");
-      slabA.classList.add("on");
-      s3timers.push(setTimeout(function(){ results3.classList.add("on"); }, 320));
-      return;
-    }
-    s3raf = requestAnimationFrame(step);
+    tok2A.textContent = shown;
+    meterA.style.width = Math.min(100, shown / (N + ANSWER_TOKENS) * 100) + "%";
+    if(el >= THINK_DUR){ finishStd(); return; }
+    s2raf = requestAnimationFrame(step);
   }
-  s3raf = requestAnimationFrame(step);
-}
-document.getElementById("replay3").addEventListener("click", runS3);
+  s2raf = requestAnimationFrame(step);
 
-/* ── 04 · sockets ──────────────────────────────────────────── */
-let s4timers = [];
-function runS4(){
-  s4timers.forEach(clearTimeout); s4timers = [];
-  const slots = Array.prototype.slice.call(document.querySelectorAll("#slots .slot"));
-  slots.forEach(function(s){ s.classList.remove("on"); s.style.setProperty("--r", "100%"); });
-  slots.forEach(function(s, i){
-    s4timers.push(setTimeout(function(){
-      s.classList.add("on");
-      s.style.setProperty("--r", 100 - parseFloat(s.dataset.r) + "%");
-    }, REDUCED ? 0 : 380 + i*420));
+  function finishStd(){
+    thinkTurn.classList.add("done");
+    tok2A.textContent = TOTAL;
+    meterA.style.width = "100%";
+    ansA.classList.add("on");
+    t2.add(function(){ wasteTag.classList.add("on"); }, 400);
+
+    /* now put the two side by side */
+    t2.add(function(){ chatGrid.classList.add("split"); }, 1100);
+    t2.add(runLatentPane, 1900);
+  }
+
+  /* the latent side thinks in the same shape — but the counter does not move */
+  function runLatentPane(){
+    const DOT = 180;
+    for(let i=0;i<6;i++){
+      t2.add(function(){
+        dotEls[i].style.background = dotEls[i].dataset.lit;
+        silentEllipsis.textContent = ".".repeat((i % 3) + 1);
+      }, i*DOT);
+    }
+    t2.add(function(){
+      silentTxt.firstChild.nodeValue = "thought, and said nothing about it";
+      silentEllipsis.textContent = "";
+      tok2B.textContent = LATENT_TOKENS;
+      meterB.style.width = (LATENT_TOKENS / TOTAL * 100) + "%";
+      ansB.classList.add("on");
+    }, 6*DOT + 220);
+    t2.add(function(){ saveTag.classList.add("on"); }, 6*DOT + 620);
+    t2.add(function(){ bill.classList.add("on"); }, 6*DOT + 900);
+  }
+}
+document.getElementById("replay2").addEventListener("click", runS2);
+
+/* ══ 03 · where the thinking lives ════════════════════════════
+   Two five-layer networks side by side: one input layer, three
+   hidden, one output. Only the latent one gets an aperture. */
+const NET = {
+  inX: 64, hx: [214, 340, 466], outX: 616,
+  cy: [150, 210, 270, 330, 390], outCy: [210, 270, 330], r: 19, rOut: 17
+};
+
+function buildNet(svg, dark){
+  const cols = [
+    { x: NET.inX,   ys: NET.cy,     r: NET.r    },
+    { x: NET.hx[0], ys: NET.cy,     r: NET.r    },
+    { x: NET.hx[1], ys: NET.cy,     r: NET.r    },
+    { x: NET.hx[2], ys: NET.cy,     r: NET.r    },
+    { x: NET.outX,  ys: NET.outCy,  r: NET.rOut }
+  ];
+  const hostIn  = svg.querySelector(".edges-in")  || svg.querySelector(".edges");
+  const hostMid = svg.querySelector(".edges");
+  const hostOut = svg.querySelector(".edges-out") || svg.querySelector(".edges");
+  const hostNodes = svg.querySelector(".nodes");
+  const edges = [], nodes = [];
+
+  for(let g=0; g<4; g++){
+    const host   = g === 0 ? hostIn : (g === 3 ? hostOut : hostMid);
+    const stroke = dark
+      ? (g === 0 ? "url(#gInB)" : (g === 3 ? "url(#gOutB)" : "#232B3D"))
+      : "#C4C7D0";
+    const bag = [];
+    cols[g].ys.forEach(function(y1){
+      cols[g+1].ys.forEach(function(y2){
+        const l = document.createElementNS(svgNS, "line");
+        l.setAttribute("x1", cols[g].x);   l.setAttribute("y1", y1);
+        l.setAttribute("x2", cols[g+1].x); l.setAttribute("y2", y2);
+        l.setAttribute("class", "nn-edge");
+        l.setAttribute("stroke", stroke);
+        l.setAttribute("stroke-opacity", ".6");
+        l.dataset.base = stroke;
+        l.dataset.hot  = dark ? rampCss(0.34 + g*0.13) : "#0E1015";
+        host.appendChild(l);
+        bag.push(l);
+      });
+    });
+    edges.push(bag);
+  }
+
+  cols.forEach(function(col, li){
+    const bag = [];
+    col.ys.forEach(function(y, i){
+      const c = document.createElementNS(svgNS, "circle");
+      c.setAttribute("cx", col.x); c.setAttribute("cy", y); c.setAttribute("r", col.r);
+      c.setAttribute("class", "nn-node");
+      let base, lit;
+      if(li === 0){ base = "#0E1015"; lit = "#0E1015"; }
+      else if(li === 4){ base = dark ? "#C4C7D0" : "#C4C7D0"; lit = "#0E1015"; }
+      else if(dark){ base = "#151C2A"; lit = rampCss(0.30 + 0.46 * (((i*0.41 + li*0.29) % 1))); }
+      else { base = "#C4C7D0"; lit = "#5B616E"; }
+      c.setAttribute("fill", base);
+      c.dataset.base = base; c.dataset.lit = lit;
+      hostNodes.appendChild(c);
+      bag.push(c);
+    });
+    nodes.push(bag);
   });
+
+  return { edges: edges, nodes: nodes };
 }
 
-/* ── deck navigation ───────────────────────────────────────── */
+const netA = buildNet(document.getElementById("netA"), false);
+const netB = buildNet(document.getElementById("netB"), true);
+
+const backA = document.getElementById("backA");
+const chipA = document.getElementById("chipA");
+const chipATx = chipA.querySelector("text");
+const loopB = document.getElementById("loopB");
+const vecB = document.getElementById("vecB");
+const countA = document.getElementById("countA");
+const countB = document.getElementById("countB");
+
+const t3 = Timers();
+let s3rafs = [];
+function s3clear(){ t3.clear(); s3rafs.forEach(cancelAnimationFrame); s3rafs = []; }
+
+function netReset(net){
+  net.edges.forEach(function(bag){
+    bag.forEach(function(l){
+      l.setAttribute("stroke", l.dataset.base);
+      l.setAttribute("stroke-opacity", ".6");
+    });
+  });
+  net.nodes.forEach(function(bag){ bag.forEach(function(c){ c.setAttribute("fill", c.dataset.base); }); });
+}
+function netFire(net, g){
+  if(!net.edges[g]) return;
+  net.edges[g].forEach(function(l){
+    l.setAttribute("stroke", l.dataset.hot);
+    l.setAttribute("stroke-opacity", "1");
+  });
+  net.nodes[g+1].forEach(function(c){ c.setAttribute("fill", c.dataset.lit); });
+  t3.add(function(){
+    net.edges[g].forEach(function(l){
+      l.setAttribute("stroke", l.dataset.base);
+      l.setAttribute("stroke-opacity", ".6");
+    });
+  }, 340);
+}
+
+/* move an element along a path — both panels run one of these at a time,
+   so each traveller keeps its own rAF slot */
+function travel(pathEl, el, dur, done){
+  const len = pathEl.getTotalLength();
+  const t0 = performance.now();
+  const slot = s3rafs.length;
+  s3rafs.push(0);
+  function tick(now){
+    const p = Math.min(1, (now - t0) / dur);
+    const pt = pathEl.getPointAtLength(len * p);
+    el.setAttribute("transform", "translate(" + pt.x + "," + pt.y + ")");
+    if(p < 1){ s3rafs[slot] = requestAnimationFrame(tick); }
+    else if(done) done();
+  }
+  s3rafs[slot] = requestAnimationFrame(tick);
+}
+
+const EXPLICIT_STEPS = ["40 / 4 = 10", "40 − 10 = 30", "0.75 × 40 = 30"];
+const TOKENS_PER_STEP = 9;
+
+function runS3(){
+  s3clear();
+  netReset(netA); netReset(netB);
+  backA.setAttribute("opacity", 0);
+  chipA.setAttribute("opacity", 0);
+  loopB.setAttribute("opacity", 0);
+  vecB.setAttribute("opacity", 0);
+  countA.textContent = "0";
+  countB.textContent = "0";
+
+  if(REDUCED){
+    [netA, netB].forEach(function(n){
+      n.nodes.forEach(function(bag, li){ if(li > 0 && li < 4) bag.forEach(function(c){ c.setAttribute("fill", c.dataset.lit); }); });
+    });
+    loopB.setAttribute("opacity", 1);
+    countA.textContent = EXPLICIT_STEPS.length * TOKENS_PER_STEP;
+    return;
+  }
+  round(0);
+}
+
+/* one reasoning step, run on both networks at once. The two travellers use
+   the same path-following animation and the same duration — the only
+   difference is where the path goes, and what the traveller is carrying. */
+const TRAVEL_MS = 820, TRAVEL_AT = 470;
+
+function round(i){
+  // both push a pass through the hidden layers
+  for(let g=0; g<3; g++){
+    t3.add(function(){ netFire(netA, g); netFire(netB, g); }, g*110);
+  }
+
+  // left only: the thought carries on into the output layer to be decoded
+  t3.add(function(){ netFire(netA, 3); }, 330);
+
+  t3.add(function(){
+    // left — a word leaves the network and comes back as input
+    chipATx.textContent = EXPLICIT_STEPS[i];
+    chipA.setAttribute("opacity", 1);
+    backA.setAttribute("opacity", 1);
+    travel(backA, chipA, TRAVEL_MS, function(){
+      chipA.setAttribute("opacity", 0);
+      backA.setAttribute("opacity", 0);
+      countA.textContent = (i + 1) * TOKENS_PER_STEP;
+    });
+
+    // right — a vector takes the same trip, inside the hidden layers
+    vecB.setAttribute("opacity", 1);
+    loopB.setAttribute("opacity", 1);
+    travel(loopB, vecB, TRAVEL_MS, function(){
+      vecB.setAttribute("opacity", 0);
+      loopB.setAttribute("opacity", 0);
+      countB.textContent = "0";
+    });
+  }, TRAVEL_AT);
+
+  const NEXT = 1500;
+  if(i < EXPLICIT_STEPS.length - 1){
+    t3.add(function(){ round(i+1); }, NEXT);
+  }else{
+    t3.add(function(){
+      netFire(netB, 3);              // only now does the latent side emit anything
+      t3.add(function(){ runS3(); }, 1900);
+    }, NEXT);
+  }
+}
+
+/* ══ 04 · how it learns ═══════════════════════════════════════ */
+(function buildTraining(){
+  const layers = document.getElementById("trLayers");
+  for(let i=0;i<6;i++){
+    const r = document.createElementNS(svgNS,"rect");
+    r.setAttribute("x", 14); r.setAttribute("y", 284 + i*13);
+    r.setAttribute("width", 122); r.setAttribute("height", 2);
+    layers.appendChild(r);
+  }
+  const dots = document.getElementById("trDots");
+  for(let i=0;i<6;i++){
+    const d = document.createElementNS(svgNS,"circle");
+    d.setAttribute("cx", 158 + i*36); d.setAttribute("cy", 18); d.setAttribute("r", 7);
+    d.setAttribute("fill", "#1E2536");
+    d.dataset.lit = rampCss(0.30 + i*0.11);
+    dots.appendChild(d);
+  }
+
+  /* one cell per transformer layer, for the token before the answer.
+     The teacher's profile is the target; the student's has to match it
+     layer by layer — that is what the distillation loss is on. */
+  const L = 36, SX = 656, SW = 376, GAP = 1;
+  const CW = (SW - GAP*(L-1)) / L;
+  const stripT = document.getElementById("stripT");
+  const stripS = document.getElementById("stripS");
+  const ticks  = document.getElementById("stripTicks");
+  for(let i=0;i<L;i++){
+    const x = SX + i*(CW + GAP);
+    const v = 0.22 + 0.62 * (Math.sin(i*0.42) * 0.35 + Math.sin(i*0.17 + 1.1) * 0.4 + 0.5);
+
+    const t = document.createElementNS(svgNS,"rect");
+    t.setAttribute("x", x); t.setAttribute("y", 225);
+    t.setAttribute("width", CW); t.setAttribute("height", 24);
+    t.setAttribute("class", "strip-cell"); t.setAttribute("fill", "#12151F");
+    t.dataset.lit = rampCss(v);
+    stripT.appendChild(t);
+
+    const s = document.createElementNS(svgNS,"rect");
+    s.setAttribute("x", x); s.setAttribute("y", 277);
+    s.setAttribute("width", CW); s.setAttribute("height", 24);
+    s.setAttribute("class", "strip-cell"); s.setAttribute("fill", "#12151F");
+    s.dataset.lit = rampCss(v);
+    stripS.appendChild(s);
+
+    const k = document.createElementNS(svgNS,"line");
+    k.setAttribute("x1", x + CW/2); k.setAttribute("y1", 249);
+    k.setAttribute("x2", x + CW/2); k.setAttribute("y2", 277);
+    k.setAttribute("class", "strip-tick");
+    ticks.appendChild(k);
+  }
+})();
+
+const trDots = Array.prototype.slice.call(document.querySelectorAll("#trDots circle"));
+const trTeacher = document.getElementById("trTeacher");
+const trPulse = document.getElementById("trPulse");
+const trLinkGroup = document.getElementById("trLinkGroup");
+const trDistill = document.getElementById("trDistill");
+const trDistillNote = document.getElementById("trDistillNote");
+const cellsT = Array.prototype.slice.call(document.querySelectorAll("#stripT rect"));
+const cellsS = Array.prototype.slice.call(document.querySelectorAll("#stripS rect"));
+const cellTicks = Array.prototype.slice.call(document.querySelectorAll("#stripTicks line"));
+const trStamp = document.getElementById("trStamp");
+const trLosses = [document.getElementById("loss1"), document.getElementById("loss2"), document.getElementById("loss3")];
+
+const t4 = Timers();
+function s4clear(){ t4.clear(); }
+
+const trTeacherItems = Array.prototype.slice.call(document.querySelectorAll("#trTeacher .tr-item"));
+const trStudentItems = Array.prototype.slice.call(document.querySelectorAll("#trStudent .tr-item"));
+
+/* The slide walks the method in the order it happens:
+   the teacher writes its reasoning out, the student runs the same
+   question in vectors, then one hidden state is matched between them. */
+function runS4(){
+  s4clear();
+  trTeacher.style.opacity = "1";
+  trTeacherItems.concat(trStudentItems).forEach(function(el){ el.classList.remove("on"); });
+  trDots.forEach(function(d){ d.setAttribute("fill", "#1E2536"); });
+  trLosses.forEach(function(l){ l.setAttribute("opacity", ".18"); });
+  cellsT.concat(cellsS).forEach(function(c){ c.setAttribute("fill", "#12151F"); });
+  cellTicks.forEach(function(k){ k.classList.remove("on"); });
+  trLinkGroup.setAttribute("opacity", 0);
+  trDistill.setAttribute("opacity", 0);
+  trDistillNote.setAttribute("opacity", 0);
+  trStamp.setAttribute("opacity", 0);
+  trPulse.setAttribute("opacity", 0);
+
+  if(REDUCED){
+    trTeacherItems.concat(trStudentItems).forEach(function(el){ el.classList.add("on"); });
+    trDots.forEach(function(d){ d.setAttribute("fill", d.dataset.lit); });
+    trLosses.forEach(function(l){ l.setAttribute("opacity", 1); });
+    cellsT.concat(cellsS).forEach(function(c){ c.setAttribute("fill", c.dataset.lit); });
+    cellTicks.forEach(function(k){ k.classList.add("on"); });
+    trLinkGroup.setAttribute("opacity", 1);
+    trDistill.setAttribute("opacity", 1);
+    trDistillNote.setAttribute("opacity", 1);
+    return;
+  }
+
+  // 1 · one network, fed the same question twice
+  t4.add(function(){
+    trPulse.setAttribute("opacity", 1);
+    trPulse.animate([{ transform:"translateY(0)" }, { transform:"translateY(-72px)" }],
+      { duration:420, easing:"cubic-bezier(.4,0,.2,1)", fill:"forwards" });
+  }, 260);
+  t4.add(function(){ trPulse.setAttribute("opacity", 0); }, 720);
+
+  // 2 · the teacher spells the reasoning out
+  trTeacherItems.forEach(function(el, i){
+    t4.add(function(){ el.classList.add("on"); }, 700 + i*110);
+  });
+
+  // 3 · the student runs the same question, in vectors
+  trStudentItems.forEach(function(el, i){
+    t4.add(function(){ el.classList.add("on"); }, 1560 + i*110);
+  });
+
+  // 4 · zoom in on the token before the answer: its whole layer stack
+  t4.add(function(){
+    trLinkGroup.setAttribute("opacity", 1);
+    trDistill.setAttribute("opacity", 1);
+  }, 2320);
+
+  // the teacher's profile — the shift that writing the reasoning out produced
+  cellsT.forEach(function(c, i){
+    t4.add(function(){ c.setAttribute("fill", c.dataset.lit); }, 2560 + i*22);
+  });
+  t4.add(function(){ trDistillNote.setAttribute("opacity", 1); }, 3100);
+
+  // the student has to reproduce it layer by layer — that is the loss
+  cellsS.forEach(function(c, i){
+    t4.add(function(){
+      cellTicks[i].classList.add("on");
+      c.setAttribute("fill", c.dataset.lit);
+    }, 3500 + i*38);
+  });
+  // as the stack aligns, the latent vectors start carrying what the words carried
+  trDots.forEach(function(d, i){
+    t4.add(function(){ d.setAttribute("fill", d.dataset.lit); }, 3700 + i*205);
+  });
+
+  // 5 · the three losses that make it work
+  trLosses.forEach(function(l, i){
+    t4.add(function(){ l.setAttribute("opacity", 1); }, 2600 + i*380);
+  });
+
+  // 6 · what survives training — the teacher and the whole distillation go away
+  t4.add(function(){
+    trTeacher.style.opacity = ".10";
+    trLinkGroup.setAttribute("opacity", 0);
+    trDistill.setAttribute("opacity", 0);
+    trDistillNote.setAttribute("opacity", 0);
+    trStamp.setAttribute("opacity", 1);
+  }, 6100);
+  t4.add(runS4, 10600);
+}
+
+/* ══ canvases ═════════════════════════════════════════════════ */
+function resizeCanvases(){
+  const q = Math.min(3, window.devicePixelRatio || 1);
+  const w = markCanvas.clientWidth, h = markCanvas.clientHeight;
+  if(!w || !h) return;
+  const nw = Math.round(w * q), nh = Math.round(h * q);
+  if(markCanvas.width !== nw || markCanvas.height !== nh){
+    markCanvas.width = nw; markCanvas.height = nh;
+  }
+}
+window.addEventListener("resize", resizeCanvases);
+
+let T0 = null;
+function frame(ts){
+  if(T0 === null) T0 = ts;
+  if(cur === 0) drawMark(REDUCED ? 4 : (ts - T0) / 1000 * 0.55);
+  requestAnimationFrame(frame);
+}
+
+/* ══ deck navigation ══════════════════════════════════════════ */
 const slides = Array.prototype.slice.call(document.querySelectorAll(".slide"));
-const TITLES = ["Identity", "Mechanism", "Side by side", "Generalisation"];
+const TITLES = ["Identity", "The token bill", "Where it lives", "How it learns"];
 const rail = document.getElementById("rail");
 TITLES.forEach(function(name, i){
   const b = document.createElement("button");
@@ -1099,7 +1347,7 @@ let cur = -1, entryTimer = null;
 function go(i){
   i = Math.max(0, Math.min(slides.length-1, i));
   if(i === cur) return;
-  s2clear(); s3clear();
+  s2clear(); s3clear(); s4clear();
   clearTimeout(entryTimer);
   cur = i;
   slides.forEach(function(s, n){ s.classList.toggle("is-active", n === i); });
@@ -1107,14 +1355,13 @@ function go(i){
     b.classList.toggle("cur", n === i);
     b.classList.toggle("done", n < i);
   });
-  // restart the reveal animations for this slide
   slides[i].querySelectorAll(".rv").forEach(function(el){
     el.style.animation = "none"; el.offsetHeight; el.style.animation = "";
   });
   resizeCanvases();
-  if(i === 1) entryTimer = setTimeout(runS2, 500);
-  if(i === 2) entryTimer = setTimeout(runS3, 620);
-  if(i === 3) runS4();
+  if(i === 1) entryTimer = setTimeout(runS2, 620);
+  if(i === 2) entryTimer = setTimeout(runS3, 500);
+  if(i === 3) entryTimer = setTimeout(runS4, 400);
   hint.style.opacity = i === 0 ? "1" : "0";
   history.replaceState(null, "", "#" + (i+1));
 }
@@ -1124,7 +1371,11 @@ window.addEventListener("keydown", function(e){
   else if(e.key === "ArrowLeft" || e.key === "PageUp"){ e.preventDefault(); go(cur-1); }
   else if(e.key === "Home"){ go(0); }
   else if(e.key === "End"){ go(slides.length-1); }
-  else if(e.key === "r" && cur === 2){ runS3(); }
+  else if(e.key === "r"){
+    if(cur === 1) runS2();
+    else if(cur === 2) runS3();
+    else if(cur === 3) runS4();
+  }
   else if(e.key === "f"){
     if(document.fullscreenElement) document.exitFullscreen();
     else document.documentElement.requestFullscreen();

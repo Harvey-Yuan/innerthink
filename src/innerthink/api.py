@@ -20,6 +20,7 @@ from innerthink.schemas import (
     GenerateResponse,
     HealthResponse,
 )
+from innerthink.telemetry import SnowflakeTelemetry, record_safely
 
 logger = logging.getLogger(__name__)
 DEMO_PATH = Path(__file__).with_name("static") / "index.html"
@@ -49,6 +50,7 @@ def create_app(
 ) -> FastAPI:
     app_settings = settings or get_settings()
     inference_lock = asyncio.Lock()
+    telemetry = SnowflakeTelemetry.from_env()
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
@@ -96,7 +98,22 @@ def create_app(
         runtime: RuntimeProtocol = request.app.state.runtime
         try:
             async with inference_lock:
-                return await asyncio.to_thread(runtime.generate, prompt, **kwargs)
+                result = await asyncio.to_thread(runtime.generate, prompt, **kwargs)
+            if telemetry is not None:
+                await asyncio.to_thread(
+                    record_safely,
+                    telemetry,
+                    result,
+                    prompt=prompt,
+                    model_id=app_settings.model_id,
+                    intervention_step=(
+                        kwargs["latent_hook"].step if kwargs.get("latent_hook") else None
+                    ),
+                    intervention_scale=(
+                        kwargs["latent_hook"].scale if kwargs.get("latent_hook") else None
+                    ),
+                )
+            return result
         except ValueError as error:
             raise HTTPException(status_code=422, detail=str(error)) from error
         except RuntimeError as error:

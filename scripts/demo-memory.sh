@@ -3,7 +3,7 @@
 set -euo pipefail
 
 HOST="${EVEROS_API__HOST:-127.0.0.1}"
-PORT="${EVEROS_API__PORT:-8000}"
+PORT="${EVEROS_API__PORT:-8001}"
 BASE="http://${HOST}:${PORT}"
 
 echo "1) health"
