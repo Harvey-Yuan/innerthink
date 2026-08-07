@@ -12,7 +12,7 @@ is not a general-purpose chat model.
 
 - Apple Silicon Mac with 32 GB unified memory recommended
 - Roughly 40 GB free disk space
-- Native arm64 Python 3.11–3.13
+- Native arm64 Python 3.12 or 3.13
 - macOS with PyTorch MPS support
 
 The CODI checkpoint is about 17 GB and the Qwen3-8B base model is another roughly
@@ -75,6 +75,68 @@ curl -s http://127.0.0.1:8000/v1/compare \
 
 Greedy decoding is the default so comparisons are repeatable. Sampling is available
 with `greedy: false`, `temperature`, `top_k`, and `top_p`.
+
+## CLI and Cursor MCP
+
+The CLI and MCP server are lightweight clients of the local API. Start the model
+endpoint on the 32 GB Apple Silicon demo machine, then run these commands from any
+machine that can reach it. The default URL is `http://127.0.0.1:8000`; override it
+with `INNERTHINK_API_URL` when the model runs on another host.
+
+For a Windows Cursor client and a Mac model host, keep the model API bound to
+loopback and create an SSH tunnel from Windows:
+
+```powershell
+ssh -L 8000:127.0.0.1:8000 mac-user@mac-host
+```
+
+Cursor and the CLI can then keep using `http://127.0.0.1:8000` locally. This is
+safer and faster to set up than publicly deploying the model endpoint.
+
+```bash
+innerthink health
+innerthink generate "What is 19 + 26 - 7? Output only the answer."
+innerthink compare "What is 19 + 26 - 7? Output only the answer."
+innerthink intervene "What is 19 + 26 - 7? Output only the answer." --step 3 --scale 0
+innerthink recall demo-user "What mistakes have I corrected in arithmetic?"
+innerthink remember demo-user "What is 2 + 2?" "4" "Correct; keep answers concise."
+innerthink cost-report
+```
+
+The project-level [`.cursor/mcp.json`](.cursor/mcp.json) starts `innerthink-mcp`
+over stdio. After dependencies are installed, restart Cursor and enable the
+`innerthink` MCP server. Cursor Auto remains the coding model and can call:
+
+- `qwen_reason` for local math/reasoning;
+- `qwen_compare` for direct-versus-latent measurements;
+- `qwen_intervene` to scale one CODI latent state and compare the result.
+- `recall_reasoning_feedback` and `remember_reasoning_feedback` for EverOS memory.
+- `snowflake_economy_summary` for aggregate token and latency economics.
+
+The intervention changes the local CODI computation. MCP cannot inspect or modify
+Cursor Auto, Claude, or OpenAI private hidden states; those models can only invoke
+the local experiment as a tool.
+
+## EverOS memory service
+
+EverOS runs as a separate local process on port `8001`, avoiding a collision with
+the model API on port `8000`:
+
+```bash
+./scripts/start-everos.sh
+./scripts/demo-memory.sh
+```
+
+Provider keys stay in `.env`. Do not expose either local service without an
+authenticated gateway.
+
+## Snowflake telemetry
+
+Set `INNERTHINK_SNOWFLAKE_ENABLED=true` and fill the `SNOWFLAKE_*` values in
+`.env` to log inference economics. The API creates `INFERENCE_EVENTS` on first
+use and records model, mode, latency, token counts, latent iterations, and
+interventions. Prompts and answers are stored only as SHA-256 hashes. Telemetry
+failures are logged without discarding a successful model result.
 
 ## What latent metrics mean
 

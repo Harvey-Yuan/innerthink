@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "innerthink": {
+      "command": "uv",
+      "args": ["run", "innerthink-mcp"],
+      "env": {
+        "INNERTHINK_API_URL": "http://127.0.0.1:8000"
+      }
+    }
+  }
+}

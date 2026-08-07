@@ -54,5 +54,7 @@ fi
 # LanceDB opens many segment files under concurrent search + indexing.
 ulimit -n 4096 2>/dev/null || true
 
-echo "starting everos (root=${MEMORY_ROOT}) on ${EVEROS_API__HOST:-127.0.0.1}:${EVEROS_API__PORT:-8000}"
+export EVEROS_API__PORT="${EVEROS_API__PORT:-8001}"
+
+echo "starting everos (root=${MEMORY_ROOT}) on ${EVEROS_API__HOST:-127.0.0.1}:${EVEROS_API__PORT}"
 exec "$EVEROS_BIN" server start --root "$MEMORY_ROOT"
