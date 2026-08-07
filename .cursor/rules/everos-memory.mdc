@@ -1,0 +1,28 @@
+---
+description: Persist agent and app memory via the local EverOS memory layer
+alwaysApply: true
+---
+
+# Use EverOS for Memory
+
+This project hosts a local [EverOS](https://github.com/EverMind-AI/EverOS) memory service. Prefer it for any durable memory (conversations, facts, preferences, agent skills), not ad-hoc files, SQLite side stores, or in-process dicts.
+
+## How to persist
+
+- Server: `./scripts/start-everos.sh` (default `http://127.0.0.1:8000`)
+- Memory root: `./data/everos` (`EVEROS_ROOT`)
+- Use **`/api/v2`** endpoints (not legacy `/api/v1` for new code):
+  - `POST /api/v2/memory/add` — ingest messages
+  - `POST /api/v2/memory/flush` — force extraction
+  - `POST /api/v2/memory/search` — recall
+
+## Conventions
+
+- Scope with `app_id` / `project_id` (this repo: prefer `app_id=innerthink` unless a feature needs isolation).
+- Store user identity in `sender_id` / `user_id` consistently across add and search.
+- Do not invent a parallel memory DB or Markdown tree outside EverOS.
+- Config and keys live in `.env` / `data/everos/everos.toml`; never commit secrets.
+
+## When implementing agents or demos
+
+Wire the agent loop to EverOS HTTP (add → flush at session end → search before answering) instead of stuffing long history into prompts alone.

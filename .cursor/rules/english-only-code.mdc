@@ -1,0 +1,21 @@
+---
+description: All source code, comments, and identifiers must be written in English
+alwaysApply: true
+---
+
+# English-Only Code
+
+- Write **all** code in English: identifiers, comments, docstrings, commit messages for code changes, log messages, error strings, and UI copy unless the product explicitly requires localized user-facing text.
+- Do not use Chinese (or other non-English languages) in source files, scripts, or config keys that the runtime reads as code.
+- Markdown docs may be bilingual when helpful; prefer English for technical docs that describe APIs and architecture.
+- Variable/function/class names: English, clear, and consistent with existing naming.
+
+```python
+# BAD
+def 保存记忆(用户id: str) -> None:
+    ...
+
+# GOOD
+def save_memory(user_id: str) -> None:
+    ...
+```
