@@ -1,11 +1,46 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
 name = "innerthink"
 version = "0.1.0"
-description = "Local EverOS memory layer hosting for InnerThink"
-requires-python = ">=3.12,<3.14"
+description = "Local Apple Silicon API for CODI-Qwen3 latent reasoning"
+readme = "README.md"
+requires-python = ">=3.11,<3.14"
 dependencies = [
-    "everos",
+  "accelerate>=1.7,<2",
+  "fastapi>=0.116,<1",
+  "huggingface-hub>=0.36,<1",
+  "peft>=0.15,<1",
+  "pydantic-settings>=2.10,<3",
+  "safetensors>=0.5,<1",
+  "torch>=2.7",
+  "transformers>=4.52,<5",
+  "uvicorn[standard]>=0.35,<1",
 ]
 
-[tool.uv]
-package = false
+[project.optional-dependencies]
+dev = [
+  "httpx>=0.28,<1",
+  "pytest>=8.4,<9",
+  "pytest-cov>=6.2,<7",
+  "ruff>=0.12,<1",
+]
+
+[project.scripts]
+innerthink-api = "innerthink.api:run"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/innerthink"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]

@@ -1,74 +1,144 @@
-# InnerThink — EverOS Memory Layer
+# InnerThink
 
-Local-first [EverOS](https://github.com/EverMind-AI/EverOS) memory service for this repo: Markdown + SQLite + LanceDB, no Mongo/Elasticsearch/Milvus/Redis.
+Local Apple Silicon inference for
+[`cds-jb/codi_qwen3-8b-answer_only`](https://huggingface.co/cds-jb/codi_qwen3-8b-answer_only).
+The API can answer directly, run CODI's continuous latent reasoning, or emit the
+model's separately trained verbalized chain of thought.
 
-## Prerequisites
+This is a research model trained mainly on grade-school math and CommonsenseQA. It
+is not a general-purpose chat model.
 
-- Python 3.12 (managed via [uv](https://docs.astral.sh/uv/))
-- API keys for the real memory pipeline:
-  - [OpenRouter](https://openrouter.ai/) → `EVEROS_LLM__API_KEY` / `EVEROS_MULTIMODAL__API_KEY`
-  - [DeepInfra](https://deepinfra.com/) → `EVEROS_EMBEDDING__API_KEY` / `EVEROS_RERANK__API_KEY`
+## Requirements
 
-Without keys you can still run the educational CLI demo (`everos demo`); `/api/v2/memory/*` needs keys.
+- Apple Silicon Mac with 32 GB unified memory recommended
+- Roughly 40 GB free disk space
+- Native arm64 Python 3.11–3.13
+- macOS with PyTorch MPS support
 
-## Setup
+The CODI checkpoint is about 17 GB and the Qwen3-8B base model is another roughly
+17 GB. They are cached by Hugging Face, not copied into this repository. Runtime
+uses FP16 and generally occupies 17–20 GB of unified memory.
 
-```bash
-uv sync
-cp .env.example .env
-# edit .env and paste the four API keys
-```
-
-First start also creates `./data/everos` (gitignored) from `config/*.example` if needed.
-
-## Start the server
-
-EverOS validates LLM/embedding/rerank keys at startup — empty keys will exit before bind.
+## Start the endpoint
 
 ```bash
-./scripts/start-everos.sh
+./scripts/setup-mac.sh
+./scripts/serve.sh
 ```
 
-Default bind: `http://127.0.0.1:8000` (loopback only; EverOS has no built-in auth).
+The first command creates `.venv`, installs the package, and downloads both models.
+Use `./scripts/setup-mac.sh --skip-download` to install only; the server will then
+download missing files on first startup.
 
-In another terminal:
+The server listens on `http://127.0.0.1:8000`. Model loading can take several
+minutes before the port becomes available.
 
 ```bash
-./scripts/healthcheck.sh
-# → {"status":"ok"}
+curl http://127.0.0.1:8000/health
 ```
 
-## First memory loop
+## Generate
 
-With the server running and keys configured:
+Latent reasoning:
 
 ```bash
-./scripts/demo-memory.sh
+curl -s http://127.0.0.1:8000/v1/generate \
+  -H 'content-type: application/json' \
+  -d '{
+    "prompt": "Janet has 16 eggs. She uses 7 and sells the rest for $2 each. How much does she make? Output only the answer.",
+    "mode": "latent"
+  }'
 ```
 
-This calls `/api/v2/memory/add` → `/flush` → `/search`. Extracted memories land as Markdown under `data/everos/`.
-
-## Educational demo (no server / no keys)
+Direct answer without latent reasoning:
 
 ```bash
-uv run everos demo --plain
+curl -s http://127.0.0.1:8000/v1/generate \
+  -H 'content-type: application/json' \
+  -d '{"prompt":"What is 19 + 26 - 7? Output only the answer.","mode":"direct"}'
 ```
 
-## Layout
+Run both modes:
 
-| Path | Purpose |
-|------|---------|
-| `pyproject.toml` / `uv.lock` | Dependencies (`everos`) |
-| `.env.example` | Env template (committed) |
-| `.env` | Secrets (gitignored) |
-| `config/*.example` | Bootstrap `everos.toml` / `ome.toml` |
-| `data/everos/` | Runtime memory root (gitignored) |
-| `scripts/start-everos.sh` | Start API |
-| `scripts/healthcheck.sh` | `GET /health` |
-| `scripts/demo-memory.sh` | add → flush → search |
+```bash
+curl -s http://127.0.0.1:8000/v1/compare \
+  -H 'content-type: application/json' \
+  -d '{"prompt":"What is 19 + 26 - 7? Output only the answer."}'
+```
 
-## Notes
+`mode` accepts:
 
-- Memory root is project-local (`EVEROS_ROOT=./data/everos`), not `~/.everos`.
-- Raise `ulimit -n` if LanceDB hits too-many-open-files (the start script tries `4096`).
-- Do not bind `0.0.0.0` without your own auth gateway in front.
+- `direct`: bypasses the continuous thought loop.
+- `latent`: runs the published six recurrent latent iterations.
+- `verbalized`: uses the checkpoint's visible-CoT path. Its text can be noisy because
+  this checkpoint was trained in answer-only format.
+
+Greedy decoding is the default so comparisons are repeatable. Sampling is available
+with `greedy: false`, `temperature`, `top_k`, and `top_p`.
+
+## What latent metrics mean
+
+Latent responses include the L2 norm of each projected state and cosine similarity
+to the previous state. The published generator has an initial projected state plus
+six recurrent passes, so `latent_iterations` is 6 while `latent_states` is 7.
+
+These values and any token-neighborhood projections are measurements of hidden
+states. They are not translations of what the model is "thinking."
+
+## Modify latent reasoning
+
+[`src/innerthink/interventions.py`](src/innerthink/interventions.py) defines the
+`LatentHook` seam. A hook receives every projected latent immediately before the
+next transformer pass and may return a modified tensor:
+
+```python
+from innerthink.interventions import ScaleStepHook
+
+result = runtime.generate(
+    prompt,
+    mode="latent",
+    latent_hook=ScaleStepHook(step=3, scale=0.0),
+)
+```
+
+This supports propagated ablations, scaling, noise injection, learned adapters, or
+activation collection without changing the API or checkpoint loader. Keep tuning
+code separate from the serving process; optimizer state for an 8B model will not fit
+comfortably in 32 GB, while projection-only or quantized-base LoRA experiments are
+more realistic.
+
+## Configuration
+
+Copy `.env.example` to `.env` to override model IDs, token limits, device, or dtype.
+For a private Hugging Face cache, set `INNERTHINK_HF_TOKEN`.
+
+The service intentionally uses one Uvicorn worker and serializes inference. More
+workers would load additional 17+ GB copies of the model.
+
+### Troubleshooting
+
+- `MPS is unavailable`: confirm `uname -m` prints `arm64`; do not run Python under
+  Rosetta.
+- Out of memory: close other GPU-heavy apps and keep one server process. Do not
+  disable Metal's memory safety watermark.
+- Unsupported MPS operation: `scripts/serve.sh` enables PyTorch's CPU fallback for
+  individual unsupported operations.
+- Slow first request: model loading and Metal kernel warm-up are one-time costs.
+
+## Hackathon directions
+
+1. **Latent thought oscilloscope (recommended, medium lift).** Animate the seven
+   measured states, then let the audience zero or scale step 3 or 4 and watch the
+   answer change. Pair it with direct and verbalized outputs.
+2. **Hidden-reasoning scoreboard (low lift).** Run 20 curated GSM8K questions and
+   show correctness, latency, output tokens, and answer agreement for each mode.
+3. **Middle-step ablation lab (low-to-medium lift).** Sweep a zero/scale intervention
+   across steps and visualize the answer or accuracy delta. It connects directly to
+   the model card's claim that middle latents are most load-bearing.
+4. **Thought transplant (medium lift).** Capture states from two problems and swap
+   selected states in a two-pass experimental runner. The surprising result to test
+   is that foreign thoughts disrupt an answer rather than transplanting the donor's
+   answer.
+
+For a five-minute demo, combine ideas 1 and 2: start with a credible aggregate
+scoreboard, then perform one live causal intervention.
