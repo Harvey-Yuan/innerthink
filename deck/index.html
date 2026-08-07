@@ -338,10 +338,84 @@ body{
 }
 .tr-strip b{ color:var(--ink); font-weight:600; }
 
+/* 05 · GENERALIZATION */
+.gen-flow{
+  flex:1 1 auto; min-height:0;
+  display:grid; grid-template-columns:minmax(0,1fr) minmax(220px,calc(360 * var(--u))) minmax(0,1fr);
+  gap:calc(22 * var(--u)); margin-top:calc(28 * var(--u));
+}
+.gen-card{
+  min-width:0; border:1px solid var(--hair); background:var(--paper-hi);
+  padding:calc(28 * var(--u)); display:flex; flex-direction:column;
+}
+.gen-card-dark{ background:var(--void); border-color:var(--void); color:#F2F3F6; }
+.gen-kicker{
+  font-family:var(--mono); font-size:max(8.5px,calc(10.5 * var(--u)));
+  letter-spacing:.18em; text-transform:uppercase; color:var(--graphite-2);
+}
+.gen-card-dark .gen-kicker{ color:#727B90; }
+.gen-title{
+  margin-top:calc(12 * var(--u)); font-family:var(--display); font-weight:600;
+  font-size:calc(31 * var(--u)); line-height:1.05; letter-spacing:-.025em;
+}
+.gen-copy{
+  margin:calc(12 * var(--u)) 0 0; max-width:38ch;
+  font-size:max(11.5px,calc(14 * var(--u))); line-height:1.5; color:var(--graphite);
+}
+.gen-card-dark .gen-copy{ color:#9AA3B5; }
+.gen-rule{ height:1px; background:var(--hair); margin:calc(22 * var(--u)) 0; }
+.gen-card-dark .gen-rule{ background:var(--void-line); }
+.gen-list{ display:grid; gap:calc(11 * var(--u)); margin:0; padding:0; list-style:none; }
+.gen-list li{
+  display:flex; align-items:center; gap:calc(11 * var(--u));
+  font-family:var(--mono); font-size:max(9.5px,calc(11.5 * var(--u))); color:var(--graphite);
+}
+.gen-list li::before{
+  content:""; width:calc(7 * var(--u)); height:calc(7 * var(--u)); min-width:5px; min-height:5px;
+  border:1px solid var(--graphite-2); border-radius:50%;
+}
+.gen-list li.on::before{ border-color:var(--sig); background:var(--sig); }
+.gen-toolset{ display:flex; flex-wrap:wrap; gap:calc(8 * var(--u)); }
+.gen-tool{
+  border:1px solid #2A3348; padding:calc(8 * var(--u)) calc(10 * var(--u));
+  font-family:var(--mono); font-size:max(8px,calc(10 * var(--u))); color:#CED3DE;
+}
+.gen-io{
+  margin-top:auto; border-top:1px solid var(--void-line); padding-top:calc(16 * var(--u));
+  display:flex; justify-content:space-between; gap:calc(12 * var(--u));
+  font-family:var(--mono); font-size:max(8px,calc(9.5 * var(--u))); letter-spacing:.12em;
+  text-transform:uppercase; color:#727B90;
+}
+.gen-steps{ display:flex; align-items:center; gap:calc(8 * var(--u)); margin-top:calc(4 * var(--u)); }
+.gen-step{
+  width:calc(28 * var(--u)); height:calc(28 * var(--u)); min-width:20px; min-height:20px;
+  border-radius:50%; background:var(--void-line); color:#AEB5C4;
+  display:grid; place-items:center; font-family:var(--mono); font-size:max(8px,calc(9.5 * var(--u)));
+}
+.gen-step.cut{ background:var(--paper-hi); border:2px solid var(--sig); color:var(--sig); }
+.gen-step-line{ flex:1; min-width:8px; height:1px; background:#343B4D; }
+.gen-callout{
+  margin-top:calc(16 * var(--u)); border-left:2px solid var(--sig); padding-left:calc(13 * var(--u));
+  font-family:var(--mono); font-size:max(9px,calc(11 * var(--u))); line-height:1.5; color:#CED3DE;
+}
+.gen-strip{
+  display:grid; grid-template-columns:repeat(3,1fr); margin-top:calc(20 * var(--u));
+  border-top:1px solid var(--hair); border-bottom:1px solid var(--hair);
+}
+.gen-proof{ min-width:0; padding:calc(14 * var(--u)) calc(18 * var(--u)); border-right:1px solid var(--hair); }
+.gen-proof:first-child{ padding-left:0; }
+.gen-proof:last-child{ border-right:0; }
+.gen-proof b{
+  display:block; font-family:var(--mono); font-size:max(8px,calc(9.5 * var(--u)));
+  letter-spacing:.16em; text-transform:uppercase; color:var(--graphite-2); margin-bottom:calc(5 * var(--u));
+}
+.gen-proof span{ font-family:var(--display); font-size:calc(20 * var(--u)); font-weight:600; letter-spacing:-.015em; }
+.gen-proof em{ font-style:normal; color:var(--sig); }
+
 /* ═══════════ navigation rail ═════════════════════════════════ */
 #rail{
   position:absolute; left:var(--pad-x); right:var(--pad-x); bottom:calc(38 * var(--u)); z-index:50;
-  display:grid; grid-template-columns:repeat(4,1fr); gap:0;
+  display:grid; grid-template-columns:repeat(5,1fr); gap:0;
   border-top:1px solid var(--hair);
 }
 .rail-i{
@@ -656,6 +730,70 @@ body{
 </section>
 
 <!-- ═════════════ rail ═════════════ -->
+<!-- 05 · GENERALIZATION -->
+<section class="slide s5" data-i="4">
+  <div class="slide-head">
+    <div>
+      <div class="eyebrow rv">Generalization</div>
+      <h2 class="h2 rv" style="animation-delay:.06s">Keep the coding model.<br><em>Add a controllable local reasoner.</em></h2>
+    </div>
+    <p class="lede rv" style="animation-delay:.12s; max-width:38ch">Cursor Auto stays in control of the repository. InnerThink is a local MCP specialist it can call for bounded reasoning, comparison, and intervention.</p>
+  </div>
+
+  <div class="gen-flow">
+    <article class="gen-card rv" style="animation-delay:.16s">
+      <div class="gen-kicker">Host model · Cursor Auto</div>
+      <div class="gen-title">Keeps coding.</div>
+      <p class="gen-copy">The selected model still reads the repository, chooses tools, edits files, and runs tests.</p>
+      <div class="gen-rule"></div>
+      <ul class="gen-list">
+        <li class="on">Inspect and edit the real codebase</li>
+        <li class="on">Call InnerThink only when useful</li>
+        <li class="on">Continue from the returned result</li>
+      </ul>
+      <div class="gen-callout" style="margin-top:auto; color:var(--graphite)">Host weights and private hidden states stay untouched.</div>
+    </article>
+
+    <article class="gen-card gen-card-dark rv" style="animation-delay:.23s">
+      <div class="gen-kicker">Tool boundary</div>
+      <div class="gen-title">InnerThink MCP</div>
+      <p class="gen-copy">One reusable interface between a general coding agent and a controllable local specialist.</p>
+      <div class="gen-rule"></div>
+      <div class="gen-toolset">
+        <span class="gen-tool">qwen_reason</span>
+        <span class="gen-tool">qwen_compare</span>
+        <span class="gen-tool">qwen_intervene</span>
+      </div>
+      <div class="gen-io"><span>stdio</span><span>localhost</span><span>structured result</span></div>
+    </article>
+
+    <article class="gen-card gen-card-dark rv" style="animation-delay:.3s">
+      <div class="gen-kicker">Local specialist · CODI-Qwen3-8B</div>
+      <div class="gen-title">Changes how it reasons.</div>
+      <p class="gen-copy">Six continuous thoughts stay local. A requested intervention can modify one latent step before the final answer returns.</p>
+      <div class="gen-rule"></div>
+      <div class="gen-steps" aria-label="Six latent reasoning steps with an intervention at step three">
+        <span class="gen-step">1</span><span class="gen-step-line"></span>
+        <span class="gen-step">2</span><span class="gen-step-line"></span>
+        <span class="gen-step cut">3</span><span class="gen-step-line"></span>
+        <span class="gen-step">4</span><span class="gen-step-line"></span>
+        <span class="gen-step">5</span><span class="gen-step-line"></span>
+        <span class="gen-step">6</span>
+      </div>
+      <div class="gen-callout">Live control: step 3 × 0<br><span style="color:#727B90">baseline and changed runs return side by side</span></div>
+      <div class="gen-io"><span>local inference</span><span>EverOS optional</span></div>
+    </article>
+  </div>
+
+  <div class="gen-strip rv" style="animation-delay:.36s">
+    <div class="gen-proof"><b>Works now</b><span>Cursor + project MCP</span></div>
+    <div class="gen-proof"><b>Generalizes through</b><span>Any <em>MCP-capable</em> host</span></div>
+    <div class="gen-proof"><b>What stays stable</b><span>Default Qwen workflow</span></div>
+  </div>
+
+  <div class="foot">The intervention changes only the local CODI latent loop. It does not inspect or modify Cursor, Claude, or OpenAI private hidden states.</div>
+</section>
+
 <nav id="rail"></nav>
 <div id="hint">← → to move</div>
 
@@ -1182,7 +1320,7 @@ function frame(ts){
 
 /* ══ deck navigation ══════════════════════════════════════════ */
 const slides = Array.prototype.slice.call(document.querySelectorAll(".slide"));
-const TITLES = ["Identity", "The token bill", "Where it lives", "How it learns"];
+const TITLES = ["Identity", "The token bill", "Where it lives", "How it learns", "Generalization"];
 const rail = document.getElementById("rail");
 TITLES.forEach(function(name, i){
   const b = document.createElement("button");

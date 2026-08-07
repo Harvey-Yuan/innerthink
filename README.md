@@ -101,6 +101,7 @@ innerthink intervene "What is 19 + 26 - 7? Output only the answer." --step 3 --s
 innerthink recall demo-user "What mistakes have I corrected in arithmetic?"
 innerthink remember demo-user "What is 2 + 2?" "4" "Correct; keep answers concise."
 innerthink cost-report
+innerthink demo --index 0 --step 3 --scale 0
 ```
 
 The project-level [`.cursor/mcp.json`](.cursor/mcp.json) starts `innerthink-mcp`
@@ -112,6 +113,18 @@ over stdio. After dependencies are installed, restart Cursor and enable the
 - `qwen_intervene` to scale one CODI latent state and compare the result.
 - `recall_reasoning_feedback` and `remember_reasoning_feedback` for EverOS memory.
 - `snowflake_economy_summary` for aggregate token and latency economics.
+- `qwen_dataset_demo` for a reproducible GSM8K direct/latent/intervention case.
+
+Download the local dataset once before using the demo command:
+
+```bash
+uv run python scripts/download-gsm8k.py --splits test
+innerthink demo --index 0
+```
+
+Omit `--index` to select a deterministic case from `--seed`. Cursor Auto should
+handle live coding tasks itself; the current CODI checkpoint is used only for
+bounded math or algorithmic-reasoning subproblems and causal interventions.
 
 The intervention changes the local CODI computation. MCP cannot inspect or modify
 Cursor Auto, Claude, or OpenAI private hidden states; those models can only invoke
@@ -133,10 +146,19 @@ authenticated gateway.
 ## Snowflake telemetry
 
 Set `INNERTHINK_SNOWFLAKE_ENABLED=true` and fill the `SNOWFLAKE_*` values in
-`.env` to log inference economics. The API creates `INFERENCE_EVENTS` on first
-use and records model, mode, latency, token counts, latent iterations, and
-interventions. Prompts and answers are stored only as SHA-256 hashes. Telemetry
-failures are logged without discarding a successful model result.
+`.env` to log inference economics. Use the connector account identifier
+(`organization-account`), not a full Snowsight URL. The local `.env` is shared
+by the API, CLI, and Cursor MCP server. Verify credentials and create the table
+before a live run:
+
+```bash
+innerthink snowflake-check
+```
+
+The API creates `INFERENCE_EVENTS` on first use and records model, mode,
+latency, token counts, latent iterations, and interventions. Prompts and
+answers are stored only as SHA-256 hashes. Telemetry failures are logged without
+discarding a successful model result.
 
 ## What latent metrics mean
 

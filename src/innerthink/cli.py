@@ -1,9 +1,11 @@
 import argparse
 import json
 from collections.abc import Sequence
+from pathlib import Path
 from typing import Any
 
 from innerthink.client import InnerThinkClient, InnerThinkClientError
+from innerthink.demo import DEFAULT_DATASET, run_dataset_demo
 from innerthink.memory import EverOSClient, EverOSClientError
 from innerthink.telemetry import SnowflakeTelemetry
 
@@ -54,6 +56,21 @@ def _parser() -> argparse.ArgumentParser:
     remember.add_argument("feedback")
 
     subparsers.add_parser("cost-report", help="Summarize inference economics in Snowflake.")
+    subparsers.add_parser(
+        "snowflake-check",
+        help="Verify Snowflake credentials and prepare the inference telemetry table.",
+    )
+
+    demo = subparsers.add_parser(
+        "demo",
+        help="Run one reproducible GSM8K direct/latent/intervention comparison.",
+    )
+    demo.add_argument("--dataset", type=Path, default=DEFAULT_DATASET)
+    demo.add_argument("--index", type=int)
+    demo.add_argument("--seed", type=int, default=0)
+    demo.add_argument("--step", type=int, default=3)
+    demo.add_argument("--scale", type=float, default=0.0)
+    demo.add_argument("--max-new-tokens", type=int, default=32)
     return parser
 
 
@@ -97,13 +114,30 @@ def main(argv: Sequence[str] | None = None) -> None:
                 args.answer,
                 args.feedback,
             )
-        else:
+        elif args.command == "cost-report":
             telemetry = SnowflakeTelemetry.from_env()
             if telemetry is None:
                 raise SystemExit(
                     "Set INNERTHINK_SNOWFLAKE_ENABLED=true and configure SNOWFLAKE_* first"
                 )
             result = telemetry.summary()
+        elif args.command == "snowflake-check":
+            telemetry = SnowflakeTelemetry.from_env()
+            if telemetry is None:
+                raise SystemExit(
+                    "Set INNERTHINK_SNOWFLAKE_ENABLED=true and configure SNOWFLAKE_* first"
+                )
+            result = telemetry.check_connection()
+        else:
+            result = run_dataset_demo(
+                client,
+                dataset=args.dataset,
+                index=args.index,
+                seed=args.seed,
+                step=args.step,
+                scale=args.scale,
+                max_new_tokens=args.max_new_tokens,
+            )
     except (InnerThinkClientError, EverOSClientError) as error:
         raise SystemExit(str(error)) from error
     _print_json(result)

@@ -25,6 +25,7 @@ def test_mcp_lists_and_calls_qwen_tools() -> None:
             "recall_reasoning_feedback",
             "remember_reasoning_feedback",
             "snowflake_economy_summary",
+            "qwen_dataset_demo",
         }
         assert result.structured_content == {"answer": "4"}
 

@@ -1,9 +1,11 @@
 import asyncio
+from pathlib import Path
 from typing import Any, Literal
 
 from mcp.server import MCPServer
 
 from innerthink.client import InnerThinkClient
+from innerthink.demo import DEFAULT_DATASET, run_dataset_demo
 from innerthink.memory import EverOSClient
 from innerthink.telemetry import SnowflakeTelemetry
 
@@ -114,6 +116,26 @@ async def snowflake_economy_summary() -> dict[str, Any]:
     if telemetry is None:
         raise RuntimeError("Set INNERTHINK_SNOWFLAKE_ENABLED=true before requesting a summary")
     return await asyncio.to_thread(telemetry.summary)
+
+
+@mcp.tool()
+async def qwen_dataset_demo(
+    index: int | None = None,
+    seed: int = 0,
+    step: int = 3,
+    scale: float = 0.0,
+    dataset: str = str(DEFAULT_DATASET),
+) -> dict[str, Any]:
+    """Run one GSM8K case through direct, latent, and intervened local Qwen paths."""
+    return await asyncio.to_thread(
+        run_dataset_demo,
+        InnerThinkClient.from_env(),
+        dataset=Path(dataset),
+        index=index,
+        seed=seed,
+        step=step,
+        scale=scale,
+    )
 
 
 def main() -> None:

@@ -6,11 +6,14 @@ alwaysApply: true
 # InnerThink tools
 
 - Keep Cursor's selected model for general coding work.
+- For live coding tasks, let Cursor inspect, edit, and test the code normally. Do not send an entire coding task to the math-focused CODI checkpoint.
+- Use InnerThink during coding only for a bounded arithmetic, algorithmic-reasoning, or causal-intervention subproblem that the user can verify independently.
 - Use `qwen_reason` when the user asks to solve or test a math or reasoning problem with InnerThink.
 - Use `qwen_compare` when the user asks to compare direct and latent reasoning cost or behavior.
 - Use `qwen_intervene` only when the user explicitly asks to modify, ablate, or inspect an intermediate latent step.
 - When a known user asks for a reasoning task, use `recall_reasoning_feedback` if prior feedback could change the answer format or route.
 - Use `remember_reasoning_feedback` after the user explicitly rates or corrects a result.
 - Use `snowflake_economy_summary` when the user asks for aggregate token, latency, or intervention metrics.
+- Use `qwen_dataset_demo` for a reproducible dataset-backed math demonstration.
 - Treat latent metrics as measurements, not as a textual translation of private chain of thought.
 - If the local service is unavailable, tell the user to start `innerthink-api`; do not silently claim a local result.

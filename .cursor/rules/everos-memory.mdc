@@ -9,7 +9,7 @@ This project hosts a local [EverOS](https://github.com/EverMind-AI/EverOS) memor
 
 ## How to persist
 
-- Server: `./scripts/start-everos.sh` (default `http://127.0.0.1:8000`)
+- Server: `./scripts/start-everos.sh` (default `http://127.0.0.1:8001`)
 - Memory root: `./data/everos` (`EVEROS_ROOT`)
 - Use **`/api/v2`** endpoints (not legacy `/api/v1` for new code):
   - `POST /api/v2/memory/add` — ingest messages
