@@ -38,6 +38,10 @@ class InnerThinkClient:
             raise InnerThinkClientError(
                 f"InnerThink API returned HTTP {error.code}: {body}"
             ) from error
+        except TimeoutError as error:
+            raise InnerThinkClientError(
+                f"InnerThink request timed out after {self.timeout_seconds}s"
+            ) from error
         except URLError as error:
             raise InnerThinkClientError(
                 f"Cannot reach InnerThink at {self.base_url}. "
@@ -56,6 +60,7 @@ class InnerThinkClient:
         latent_iterations: int | None = None,
         intervention_step: int | None = None,
         intervention_scale: float | None = None,
+        include_latent_metrics: bool | None = None,
     ) -> dict[str, Any]:
         payload: dict[str, Any] = {"prompt": prompt, "mode": mode}
         optional = {
@@ -63,6 +68,7 @@ class InnerThinkClient:
             "latent_iterations": latent_iterations,
             "intervention_step": intervention_step,
             "intervention_scale": intervention_scale,
+            "include_latent_metrics": include_latent_metrics,
         }
         payload.update({key: value for key, value in optional.items() if value is not None})
         return self._request("POST", "/v1/generate", payload)
