@@ -15,11 +15,25 @@ class GenerateRequest(BaseModel):
     top_k: int = Field(default=40, ge=0, le=500)
     top_p: float = Field(default=0.95, gt=0, le=1)
     include_latent_metrics: bool = True
+    intervention_step: int | None = Field(default=None, ge=0, le=32)
+    intervention_scale: float | None = Field(default=None, ge=-4, le=4)
 
     @model_validator(mode="after")
     def validate_mode_options(self) -> "GenerateRequest":
         if self.mode != "latent" and self.latent_iterations is not None:
             raise ValueError("latent_iterations is only valid in latent mode")
+        has_step = self.intervention_step is not None
+        has_scale = self.intervention_scale is not None
+        if has_step != has_scale:
+            raise ValueError("intervention_step and intervention_scale must be provided together")
+        if has_step and self.mode != "latent":
+            raise ValueError("latent intervention is only valid in latent mode")
+        if (
+            self.intervention_step is not None
+            and self.latent_iterations is not None
+            and self.intervention_step > self.latent_iterations
+        ):
+            raise ValueError("intervention_step cannot exceed latent_iterations")
         return self
 
 

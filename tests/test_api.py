@@ -98,3 +98,48 @@ def test_rejects_latent_iterations_in_direct_mode() -> None:
         )
 
     assert response.status_code == 422
+
+
+def test_accepts_opt_in_latent_intervention() -> None:
+    app = create_app(
+        settings=Settings(device="cpu"),
+        runtime_factory=FakeRuntime,
+    )
+    with TestClient(app) as client:
+        response = client.post(
+            "/v1/generate",
+            json={
+                "prompt": "What is 2 + 2?",
+                "mode": "latent",
+                "latent_iterations": 6,
+                "intervention_step": 3,
+                "intervention_scale": 0.0,
+            },
+        )
+
+    assert response.status_code == 200
+    assert response.json()["answer"] == "38"
+
+
+def test_rejects_partial_or_non_latent_intervention() -> None:
+    app = create_app(
+        settings=Settings(device="cpu"),
+        runtime_factory=FakeRuntime,
+    )
+    with TestClient(app) as client:
+        missing_scale = client.post(
+            "/v1/generate",
+            json={"prompt": "What is 2 + 2?", "intervention_step": 3},
+        )
+        direct = client.post(
+            "/v1/generate",
+            json={
+                "prompt": "What is 2 + 2?",
+                "mode": "direct",
+                "intervention_step": 3,
+                "intervention_scale": 0.0,
+            },
+        )
+
+    assert missing_scale.status_code == 422
+    assert direct.status_code == 422
