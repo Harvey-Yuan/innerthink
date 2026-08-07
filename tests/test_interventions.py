@@ -13,5 +13,6 @@ def test_recording_hook_records_and_transforms_selected_step() -> None:
     assert torch.equal(second, torch.zeros(1, 1, 2))
     assert hook.steps[0].l2_norm == 5.0
     assert hook.steps[0].cosine_from_previous is None
+    assert len(hook.steps[0].activation_bins) == 2
     assert hook.steps[1].l2_norm == 0.0
     assert hook.steps[1].cosine_from_previous == 0.0
