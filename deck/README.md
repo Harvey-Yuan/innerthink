@@ -18,17 +18,21 @@ The server points at `./deck`, **not** the project root, and that is deliberate:
 |---|---|
 | `←` `→` `space` | move |
 | `Home` `End` | first / last |
-| `r` | replay the run on slide 03 |
+| `r` | replay the current slide's animation |
 | `f` | fullscreen |
 
 The current slide is mirrored into the URL hash, so `#3` deep-links to slide 03. The deck fills any browser window; there is no fixed stage.
 
 ## The four slides
 
+The hackathon theme is *save tokens*, and the deck is built as one argument: here is the bill → here is where the waste comes from → here is how you train it away.
+
 1. **Identity** — wordmark, the one-line thesis, three spec cards.
-2. **Mechanism** — the CODI inference loop animated six times, then self-distillation.
-3. **Side by side** — GSM8K's Natalia problem run against explicit CoT and latent CoT.
-4. **Generalisation** — the adapter is 4.3% of the weights, and it moves between bases.
+2. **The token bill** — a live chat turn, with the token counter as the hero: a 58u display number over a full-width meter, pink on the left because it is money burning. A reasoning model spends 109 tokens of thinking on a trivial question and replies with one line; then the pane splits and InnerThink runs the same turn in the *same chat shape* — question, a "thinking silently…" row, the reply — so the only difference on screen is that its thinking never becomes text. Ends on the bill: 117 → 14, −88%. Both meters share one scale, so the right-hand stub is directly comparable to the full left bar; keep that if you change the numbers.
+3. **Where the thinking lives** — the neural-net diagram. In explicit mode a token chip physically *leaves* the aperture, arcs across the paper and re-enters as input, and the emitted-token counter climbs. In latent mode the loop runs from the last hidden layer back to the first, entirely inside the dark, and the counter stays at 0.
+4. **How it learns** — self-distillation. One network, two branches; the teacher's words and the student's vectors are aligned at the token before the answer. The closing beat dissolves the teacher branch and replaces it with "Same answers. None of the words."
+
+Slides 02–04 auto-play on entry and slides 03–04 loop; `r` restarts the current one.
 
 ## Design language
 
@@ -64,11 +68,12 @@ CODI = *Compressing Chain-of-Thought into Continuous Space via Self-Distillation
 | 6 latent tokens; LoRA r=128, α=32 on q,k,v,o,gate,up,down | model card |
 | GSM8k-Aug-NL + CommonsenseQA ≈388k; 5 epochs, 8×H100, lr 2e-4 | model card |
 | 49.3% latent vs 49.9% verbalised (Qwen3-8B, answer-only) | model card |
-| 43.7% at GPT-2 scale, +28.2 pts over Coconut; 55.6% on Llama-3.2-1B | paper |
 | 3.1× compression, 2.7–5.9× speed-up | paper |
+| the ⟨bot⟩ / 6 latent steps / ⟨eot⟩ loop and the L1-on-hidden-state objective | paper §3 |
 | 0.35 B of 8.2 B trainable (4.3%) | computed from the Qwen3-8B config: 4096 hidden, 36 layers, 32/8 GQA heads, 12288 FFN, at rank 128 |
 
-Two honesty constraints the deck already states in footnotes, and that must survive any edit:
+Three honesty constraints the deck states in footnotes, and that must survive any edit:
 
-- The model rows on slide 04 use **different GSM8k variants and setups** and are not directly comparable; each is read against its own verbalised baseline.
-- The 3.1s → 0.9s decode on slide 03 is an **illustration of a single item**, not a measurement from this repo. The token counts *are* real — the counter counts exactly the words rendered on screen. If you measure real latency, replace `A_END`/`B_END` in `runS3()` and drop the caveat.
+- Slide 02 is an **illustrative single turn**, not a logged run. The 109 thinking tokens are honest in the only sense that matters — the counter counts exactly the words rendered on screen — and a real Qwen3-8B trace on that question is typically *longer*, not shorter. The 14-token latent side is 6 latent steps + 8 answer tokens. If you log a real turn, replace `THINK` and `ANSWER_TOKENS` in `runS2()` and drop the caveat.
+- Slide 03's **layer counts are illustrative**: 4 hidden layers of 5 units stands in for 36 transformer layers, and the diagram's recurrence stands in for the last hidden state passed through the 2-layer MLP + LayerNorm.
+- Slide 04's "27 tokens" for the teacher branch is the length of the three reasoning chips shown, matching the emitted-token count on slide 03. Keep those two numbers in sync if you change either.
