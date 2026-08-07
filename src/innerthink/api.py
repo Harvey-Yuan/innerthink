@@ -2,12 +2,16 @@ import asyncio
 import logging
 from collections.abc import Callable
 from contextlib import asynccontextmanager
+from pathlib import Path
 from typing import Any, Protocol
 
 import uvicorn
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import FileResponse
 
 from innerthink.config import Settings, get_settings
+from innerthink.interventions import ScaleStepHook
+from innerthink.results import result_detail, result_index
 from innerthink.runtime import CodiRuntime, InferenceResult
 from innerthink.schemas import (
     CompareRequest,
@@ -18,6 +22,7 @@ from innerthink.schemas import (
 )
 
 logger = logging.getLogger(__name__)
+DEMO_PATH = Path(__file__).with_name("static") / "index.html"
 
 
 class RuntimeProtocol(Protocol):
@@ -65,6 +70,24 @@ def create_app(
     async def health(request: Request) -> dict[str, Any]:
         return request.app.state.runtime.model_info()
 
+    @application.get("/", include_in_schema=False)
+    async def demo() -> FileResponse:
+        return FileResponse(
+            DEMO_PATH,
+            headers={"Cache-Control": "no-store, max-age=0"},
+        )
+
+    @application.get("/v1/results")
+    async def cached_results() -> dict[str, Any]:
+        return await asyncio.to_thread(result_index, app_settings)
+
+    @application.get("/v1/results/{result_id}")
+    async def cached_result(result_id: str) -> dict[str, Any]:
+        result = await asyncio.to_thread(result_detail, app_settings, result_id)
+        if result is None:
+            raise HTTPException(status_code=404, detail="Cached result not found.")
+        return result
+
     async def infer(
         request: Request,
         prompt: str,
@@ -82,6 +105,12 @@ def create_app(
 
     @application.post("/v1/generate", response_model=GenerateResponse)
     async def generate(payload: GenerateRequest, request: Request) -> GenerateResponse:
+        latent_hook = None
+        if payload.intervention is not None:
+            latent_hook = ScaleStepHook(
+                step=payload.intervention.step,
+                scale=payload.intervention.scale,
+            )
         result = await infer(
             request,
             payload.prompt,
@@ -93,6 +122,7 @@ def create_app(
             top_k=payload.top_k,
             top_p=payload.top_p,
             include_latent_metrics=payload.include_latent_metrics,
+            latent_hook=latent_hook,
         )
         return _response(result)
 

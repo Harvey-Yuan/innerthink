@@ -5,6 +5,12 @@ from pydantic import BaseModel, Field, model_validator
 GenerationMode = Literal["direct", "latent", "verbalized"]
 
 
+class LatentInterventionRequest(BaseModel):
+    type: Literal["scale"] = "scale"
+    step: int = Field(ge=0, le=32)
+    scale: float = Field(ge=0, le=2)
+
+
 class GenerateRequest(BaseModel):
     prompt: str = Field(min_length=1, max_length=20_000)
     mode: GenerationMode = "latent"
@@ -15,11 +21,20 @@ class GenerateRequest(BaseModel):
     top_k: int = Field(default=40, ge=0, le=500)
     top_p: float = Field(default=0.95, gt=0, le=1)
     include_latent_metrics: bool = True
+    intervention: LatentInterventionRequest | None = None
 
     @model_validator(mode="after")
     def validate_mode_options(self) -> "GenerateRequest":
         if self.mode != "latent" and self.latent_iterations is not None:
             raise ValueError("latent_iterations is only valid in latent mode")
+        if self.mode != "latent" and self.intervention is not None:
+            raise ValueError("intervention is only valid in latent mode")
+        if (
+            self.intervention is not None
+            and self.latent_iterations is not None
+            and self.intervention.step > self.latent_iterations
+        ):
+            raise ValueError("intervention step exceeds latent_iterations")
         return self
 
 
@@ -27,6 +42,7 @@ class LatentStepResponse(BaseModel):
     step: int
     l2_norm: float
     cosine_from_previous: float | None
+    activation_bins: list[float] = Field(default_factory=list)
 
 
 class GenerateResponse(BaseModel):
@@ -35,6 +51,7 @@ class GenerateResponse(BaseModel):
     elapsed_ms: float
     prompt_tokens: int
     output_tokens: int
+    token_pieces: list[str] = Field(default_factory=list)
     visible_reasoning_tokens: int
     latent_iterations: int
     latent_states: int
