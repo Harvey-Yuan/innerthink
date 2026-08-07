@@ -431,10 +431,124 @@ body{
 .gen-proof span{ font-family:var(--display); font-size:calc(20 * var(--u)); font-weight:600; letter-spacing:-.015em; }
 .gen-proof em{ font-style:normal; color:var(--sig); }
 
+/* ═══════════ 05 · LOCAL EVALUATION ═══════════════════════════ */
+.eval-grid{
+  flex:1; min-height:0; display:grid; grid-template-columns:minmax(0,1.55fr) minmax(280px,.55fr);
+  gap:calc(34 * var(--u)); margin-top:calc(28 * var(--u));
+}
+.accuracy-board{
+  align-self:stretch; border-top:1px solid var(--ink); border-bottom:1px solid var(--ink);
+  display:flex; flex-direction:column; justify-content:center;
+}
+.accuracy-row{
+  display:grid; grid-template-columns:calc(150 * var(--u)) minmax(0,1fr) calc(108 * var(--u));
+  gap:calc(18 * var(--u)); align-items:center; padding:calc(27 * var(--u)) 0;
+  border-bottom:1px solid var(--hair);
+}
+.accuracy-row:last-child{ border-bottom:0; }
+.accuracy-name{
+  font-family:var(--mono); font-size:max(9px, calc(11 * var(--u))); letter-spacing:.18em;
+  text-transform:uppercase; color:var(--graphite);
+}
+.accuracy-track{
+  position:relative; height:calc(28 * var(--u)); min-height:16px;
+  background:var(--paper-lo); overflow:hidden;
+}
+.accuracy-track::after{
+  content:""; position:absolute; top:0; bottom:0; left:50%; width:1px;
+  background:rgba(14,16,21,.24);
+}
+.accuracy-fill{ display:block; width:var(--position); height:100%; background:var(--graphite-2); }
+.accuracy-row.latent .accuracy-fill{ background:linear-gradient(90deg,var(--sig-deep),var(--sig)); }
+.accuracy-row.verbal .accuracy-fill{ background:var(--ink); }
+.accuracy-value{
+  font-family:var(--display); font-size:calc(36 * var(--u)); line-height:1; font-weight:600;
+  letter-spacing:-.03em; text-align:right; font-variant-numeric:tabular-nums;
+}
+.accuracy-axis{
+  display:grid; grid-template-columns:calc(150 * var(--u)) minmax(0,1fr) calc(108 * var(--u));
+  gap:calc(18 * var(--u)); padding:calc(11 * var(--u)) 0 calc(7 * var(--u));
+  font-family:var(--mono); font-size:max(8px, calc(9 * var(--u))); color:var(--graphite-2);
+  letter-spacing:.08em; text-transform:uppercase;
+}
+.accuracy-scale{ display:flex; justify-content:space-between; }
+.accuracy-scale i{ font-style:normal; }
+.accuracy-axis-note{ text-align:right; white-space:nowrap; }
+.eval-aperture{
+  background:var(--void); color:var(--paper-hi); padding:calc(30 * var(--u));
+  display:flex; flex-direction:column; justify-content:space-between; min-width:0;
+}
+.eval-kicker{
+  font-family:var(--mono); font-size:max(8.5px, calc(10.5 * var(--u))); letter-spacing:.18em;
+  text-transform:uppercase; color:#6F778A;
+}
+.eval-delta{ padding:calc(22 * var(--u)) 0; border-bottom:1px solid var(--void-line); }
+.eval-delta b{
+  display:block; font-family:var(--display); font-size:calc(56 * var(--u)); line-height:.9;
+  letter-spacing:-.04em; color:var(--paper-hi);
+}
+.eval-delta.hot b{ color:#FF4D99; }
+.eval-delta span{
+  display:block; margin-top:calc(9 * var(--u)); font-family:var(--mono);
+  font-size:max(9px, calc(10.5 * var(--u))); line-height:1.5; color:#858DA0;
+}
+.eval-method{
+  font-family:var(--mono); font-size:max(8.5px, calc(10 * var(--u))); line-height:1.65;
+  color:#737B8D; margin-top:calc(18 * var(--u));
+}
+
+/* ═══════════ 06 · THE COMPUTE TRADE ══════════════════════════ */
+.speed-grid{
+  flex:1; min-height:0; display:grid; grid-template-columns:minmax(0,1.5fr) minmax(300px,.5fr);
+  gap:calc(34 * var(--u)); margin-top:calc(28 * var(--u));
+}
+.speed-board{
+  border-top:1px solid var(--ink); border-bottom:1px solid var(--ink);
+  display:flex; flex-direction:column; justify-content:center;
+}
+.speed-row{
+  display:grid; grid-template-columns:calc(130 * var(--u)) minmax(0,1fr) calc(126 * var(--u));
+  gap:calc(18 * var(--u)); align-items:center; padding:calc(25 * var(--u)) 0;
+  border-bottom:1px solid var(--hair);
+}
+.speed-row:last-child{ border-bottom:0; }
+.speed-name{
+  font-family:var(--mono); font-size:max(9px, calc(11 * var(--u))); letter-spacing:.18em;
+  text-transform:uppercase; color:var(--graphite);
+}
+.speed-track{ height:calc(20 * var(--u)); min-height:12px; background:var(--paper-lo); }
+.speed-fill{ display:block; width:var(--width); height:100%; background:var(--graphite-2); }
+.speed-row.latent .speed-fill{ background:linear-gradient(90deg,var(--sig-deep),var(--sig)); }
+.speed-row.verbal .speed-fill{ background:var(--ink); }
+.speed-value{ text-align:right; }
+.speed-value b{
+  display:block; font-family:var(--display); font-size:calc(34 * var(--u)); line-height:1;
+  font-weight:600; letter-spacing:-.03em; font-variant-numeric:tabular-nums;
+}
+.speed-value small{
+  display:block; margin-top:calc(5 * var(--u)); font-family:var(--mono);
+  font-size:max(8px, calc(9.5 * var(--u))); color:var(--graphite-2);
+}
+.trade-stack{ display:grid; grid-template-rows:1fr 1fr; gap:1px; background:var(--void-line); }
+.trade-card{
+  background:var(--void); color:var(--paper-hi); padding:calc(28 * var(--u));
+  display:flex; flex-direction:column; justify-content:space-between;
+}
+.trade-card.signal{ background:linear-gradient(145deg,#11142B 0%,#08090E 68%); }
+.trade-card strong{
+  display:block; font-family:var(--display); font-size:calc(66 * var(--u)); line-height:.86;
+  letter-spacing:-.05em; color:var(--paper-hi);
+}
+.trade-card.signal strong{ color:#FF4D99; }
+.trade-card span{
+  display:block; margin-top:calc(12 * var(--u)); font-family:var(--mono);
+  font-size:max(9px, calc(10.5 * var(--u))); line-height:1.5; color:#7C8496;
+}
+
 /* ═══════════ navigation rail ═════════════════════════════════ */
 #rail{
   position:absolute; left:var(--pad-x); right:var(--pad-x); bottom:calc(46 * var(--u)); z-index:50;
-  display:grid; grid-template-columns:repeat(5,1fr); gap:0;
+  display:grid; gap:0;
   border-top:1px solid var(--hair);
 }
 .rail-i{
@@ -477,6 +591,8 @@ body{
   .mode-card{ display:none; }
   .bill{ grid-template-columns:repeat(2,1fr); }
   .bill .cell:nth-child(2){ border-right:0; }
+  .eval-grid,.speed-grid{ grid-template-columns:1fr; }
+  .eval-aperture,.trade-stack{ display:none; }
 }
 
 @media (prefers-reduced-motion: reduce){
@@ -805,6 +921,97 @@ body{
   </div>
 
   <div class="foot">Method and figures from Shen et al., <i>CODI: Compressing Chain-of-Thought into Continuous Space via Self-Distillation</i>, EMNLP 2025, and the CODI-Qwen3-8B model card. Adapter size computed from the Qwen3-8B config at rank 128.</div>
+</section>
+
+<!-- ═════════════ 05 · LOCAL EVALUATION ═════════════ -->
+<section class="slide s5" data-i="4">
+  <div class="slide-head">
+    <div>
+      <div class="eyebrow rv">Local evaluation · not training data</div>
+      <h2 class="h2 rv" style="animation-delay:.06s">Six silent passes buy 3.6 points<br><em>over no reasoning.</em></h2>
+    </div>
+    <p class="lede rv" style="animation-delay:.12s; max-width:38ch">A deterministic run across 250 randomly selected GSM8K test questions on the local Apple Silicon endpoint.</p>
+  </div>
+
+  <div class="eval-grid">
+    <div class="accuracy-board rv" style="animation-delay:.16s">
+      <div class="accuracy-row direct">
+        <span class="accuracy-name">Direct</span>
+        <span class="accuracy-track"><i class="accuracy-fill" style="--position:26%"></i></span>
+        <strong class="accuracy-value">47.6%</strong>
+      </div>
+      <div class="accuracy-row latent">
+        <span class="accuracy-name">Latent</span>
+        <span class="accuracy-track"><i class="accuracy-fill" style="--position:62%"></i></span>
+        <strong class="accuracy-value">51.2%</strong>
+      </div>
+      <div class="accuracy-row verbal">
+        <span class="accuracy-name">Verbal</span>
+        <span class="accuracy-track"><i class="accuracy-fill" style="--position:74%"></i></span>
+        <strong class="accuracy-value">52.4%</strong>
+      </div>
+      <div class="accuracy-axis">
+        <span></span>
+        <span class="accuracy-scale"><i>45%</i><i>50%</i><i>55%</i></span>
+        <span class="accuracy-axis-note">zoomed axis</span>
+      </div>
+    </div>
+
+    <aside class="eval-aperture rv" style="animation-delay:.24s">
+      <div>
+        <div class="eval-kicker">What the sample says</div>
+        <div class="eval-delta hot"><b>+7.6%</b><span>relative lift over direct · +3.6 percentage points</span></div>
+        <div class="eval-delta"><b>−1.2 pp</b><span>latent accuracy behind verbal chain-of-thought</span></div>
+      </div>
+      <p class="eval-method">GREEDY DECODING<br>SEED 11 · GSM8K TEST<br>250 / 250 COMPLETE</p>
+    </aside>
+  </div>
+
+  <div class="foot">Accuracy axis is explicitly zoomed to 45–55% so the measured separation is legible. Results are from one deterministic local sample, not a confidence interval or a replacement for the model card benchmark.</div>
+</section>
+
+<!-- ═════════════ 06 · THE COMPUTE TRADE ═════════════ -->
+<section class="slide s6" data-i="5">
+  <div class="slide-head">
+    <div>
+      <div class="eyebrow rv">Same questions · wall-clock time</div>
+      <h2 class="h2 rv" style="animation-delay:.06s">Latent reasoning keeps most of the gain.<br><em>It skips most of the wait.</em></h2>
+    </div>
+    <p class="lede rv" style="animation-delay:.12s; max-width:37ch">The six recurrent passes cost compute, but decoding a full verbal chain costs much more on this machine.</p>
+  </div>
+
+  <div class="speed-grid">
+    <div class="speed-board rv" style="animation-delay:.16s">
+      <div class="speed-row direct">
+        <span class="speed-name">Direct</span>
+        <span class="speed-track"><i class="speed-fill" style="--width:11.4%"></i></span>
+        <span class="speed-value"><b>0.59s</b><small>2.5 min total</small></span>
+      </div>
+      <div class="speed-row latent">
+        <span class="speed-name">Latent</span>
+        <span class="speed-track"><i class="speed-fill" style="--width:23.6%"></i></span>
+        <span class="speed-value"><b>1.23s</b><small>5.1 min total</small></span>
+      </div>
+      <div class="speed-row verbal">
+        <span class="speed-name">Verbal</span>
+        <span class="speed-track"><i class="speed-fill" style="--width:100%"></i></span>
+        <span class="speed-value"><b>5.20s</b><small>21.7 min total</small></span>
+      </div>
+    </div>
+
+    <aside class="trade-stack rv" style="animation-delay:.24s">
+      <div class="trade-card signal">
+        <strong>4.2×</strong>
+        <span>faster than verbal chain-of-thought, averaged across all 250 questions</span>
+      </div>
+      <div class="trade-card">
+        <strong>52</strong>
+        <span>visible output tokens avoided per question on average</span>
+      </div>
+    </aside>
+  </div>
+
+  <div class="foot">Latency is end-to-end generation time reported by the local endpoint. Latent is still 2.1× slower than direct because six hidden recurrent passes are real compute; the saving is decoding and emitting the verbal reasoning sequence.</div>
 </section>
 
 <!-- ═════════════ rail ═════════════ -->
@@ -1468,9 +1675,13 @@ function frame(ts){
 }
 
 /* ══ deck navigation ══════════════════════════════════════════ */
+const generalizationSlide = document.querySelector(".gen-flow").closest(".slide");
+const localResultsSlide = document.querySelector(".eval-grid").closest(".slide");
+generalizationSlide.parentNode.insertBefore(generalizationSlide, localResultsSlide);
 const slides = Array.prototype.slice.call(document.querySelectorAll(".slide"));
-const TITLES = ["Identity", "The token bill", "Where it lives", "How it learns", "Generalization"];
+const TITLES = ["Identity", "The token bill", "Where it lives", "How it learns", "Generalization", "Local results", "Compute trade"];
 const rail = document.getElementById("rail");
+rail.style.gridTemplateColumns = "repeat(" + TITLES.length + ",1fr)";
 TITLES.forEach(function(name, i){
   const b = document.createElement("button");
   b.className = "rail-i";
