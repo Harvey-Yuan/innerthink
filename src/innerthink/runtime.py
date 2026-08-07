@@ -22,10 +22,11 @@ class InferenceResult:
     elapsed_ms: float
     prompt_tokens: int
     output_tokens: int
+    token_pieces: list[str]
     visible_reasoning_tokens: int
     latent_iterations: int
     latent_states: int
-    latent_metrics: list[dict[str, float | int | None]]
+    latent_metrics: list[dict[str, Any]]
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -193,7 +194,18 @@ class CodiRuntime:
         sequence = output.sequences[0].detach().cpu()
         answer = self.model.tokenizer.decode(sequence, skip_special_tokens=True).strip()
         special_ids = set(self.model.tokenizer.all_special_ids)
-        output_tokens = int(sum(token_id not in special_ids for token_id in sequence.tolist()))
+        visible_token_ids = [
+            token_id for token_id in sequence.tolist() if token_id not in special_ids
+        ]
+        token_pieces = [
+            self.model.tokenizer.decode(
+                [token_id],
+                skip_special_tokens=True,
+                clean_up_tokenization_spaces=False,
+            ).replace("\ufffd", "")
+            for token_id in visible_token_ids
+        ]
+        output_tokens = len(visible_token_ids)
         metrics = (
             [step.to_dict() for step in recorder.steps]
             if recorder is not None and include_latent_metrics
@@ -205,6 +217,7 @@ class CodiRuntime:
             elapsed_ms=elapsed_ms,
             prompt_tokens=prompt_tokens,
             output_tokens=output_tokens,
+            token_pieces=token_pieces,
             visible_reasoning_tokens=output_tokens if mode == "verbalized" else 0,
             latent_iterations=iterations if mode == "latent" else 0,
             latent_states=len(recorder.steps) if recorder is not None else 0,

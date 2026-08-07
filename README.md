@@ -33,6 +33,19 @@ download missing files on first startup.
 The server listens on `http://127.0.0.1:8000`. Model loading can take several
 minutes before the port becomes available.
 
+Open `http://127.0.0.1:8000` for the live three-path comparison and latent
+oscilloscope. The page runs direct, verbalized, and latent inference, then lets you
+scale or zero one latent state and compare the regenerated trace and answer.
+
+The **Cached 250** tab browses a deterministic random sample of GSM8K test
+questions (`seed=11`) with all three model responses, correctness, activation
+fingerprints, aggregate accuracy, and latency comparisons. Populate or resume it
+while the server is running:
+
+```bash
+.venv/bin/python scripts/cache-gsm8k-results.py
+```
+
 ```bash
 curl http://127.0.0.1:8000/health
 ```
@@ -166,6 +179,11 @@ Latent responses include the L2 norm of each projected state and cosine similari
 to the previous state. The published generator has an initial projected state plus
 six recurrent passes, so `latent_iterations` is 6 while `latent_states` is 7.
 
+Each state also returns a 64-bin activation fingerprint. The runtime groups the
+4096 hidden dimensions into fixed bins, averages each group, and standardizes the
+64 values within that state. The local demo renders these real measurements beside
+the model's individual verbalized token pieces to show reasoning-route compression.
+
 These values and any token-neighborhood projections are measurements of hidden
 states. They are not translations of what the model is "thinking."
 
@@ -183,6 +201,18 @@ result = runtime.generate(
     mode="latent",
     latent_hook=ScaleStepHook(step=3, scale=0.0),
 )
+```
+
+The same propagated intervention is available over HTTP:
+
+```bash
+curl -s http://127.0.0.1:8000/v1/generate \
+  -H 'content-type: application/json' \
+  -d '{
+    "prompt": "What is 19 + 26 - 7? Output only the answer.",
+    "mode": "latent",
+    "intervention": {"type": "scale", "step": 3, "scale": 0}
+  }'
 ```
 
 This supports propagated ablations, scaling, noise injection, learned adapters, or

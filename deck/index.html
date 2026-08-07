@@ -283,39 +283,50 @@ body{
 .bill .big dd{ color:var(--sig); }
 
 /* ═══════════ 03 · WHERE THE THINKING LIVES ═══════════════════ */
-#nnsvg{ flex:1 1 auto; min-height:0; width:100%; height:100%; margin-top:calc(14 * var(--u)); }
-
-.mode-card{
-  flex:0 0 auto; width:calc(340 * var(--u)); min-width:210px;
-  border-left:2px solid var(--sig); padding-left:calc(18 * var(--u));
+.nn-grid{
+  flex:1 1 auto; min-height:0; display:grid; grid-template-columns:1fr 1px 1fr;
+  gap:calc(36 * var(--u)); margin-top:calc(18 * var(--u));
 }
-.mode-card .mode-kind{
-  font-family:var(--mono); font-size:max(8.5px, calc(10 * var(--u)));
-  letter-spacing:.18em; text-transform:uppercase; color:var(--graphite-2);
+.nn-divider{ width:1px; background:var(--ink); opacity:.28; }
+.nn-panel{ min-width:0; min-height:0; display:flex; flex-direction:column; }
+.nn-bar{
+  display:flex; justify-content:space-between; align-items:flex-end;
+  gap:calc(16 * var(--u)); padding-bottom:calc(8 * var(--u)); white-space:nowrap;
 }
-.mode-card .mode-name{
-  font-family:var(--display); font-size:calc(24 * var(--u)); font-weight:600;
-  letter-spacing:-.02em; margin-top:calc(4 * var(--u)); line-height:1.1;
+.nn-bar .who{
+  font-family:var(--mono); font-size:max(9px, calc(11 * var(--u)));
+  letter-spacing:.15em; text-transform:uppercase; padding-bottom:calc(7 * var(--u));
+  overflow:hidden; text-overflow:ellipsis;
 }
-.mode-card .mode-desc{
-  font-size:max(11.5px, calc(14 * var(--u))); line-height:1.5;
-  color:var(--graphite); margin-top:calc(8 * var(--u));
+.nn-panel.it .nn-bar .who{ color:var(--sig); }
+.nn-panel.it .count b{ color:var(--ink); }
+.nn-rule{ height:1px; background:var(--hair); }
+.nn-sub{
+  padding-top:calc(9 * var(--u));
+  font-family:var(--mono); font-size:max(9px, calc(11 * var(--u)));
+  letter-spacing:.04em; color:var(--graphite-2);
 }
-.mode-card .mode-count{
-  font-family:var(--mono); font-size:max(9.5px, calc(11.5 * var(--u)));
-  letter-spacing:.06em; color:var(--graphite-2); margin-top:calc(12 * var(--u));
+.nn-sub b{ color:var(--graphite); font-weight:500; }
+.nn-vec rect{ fill:url(#gVecB); }
+.nn-net{ flex:1 1 auto; min-height:0; width:100%; height:100%; }
+.nn-cap{
+  margin:0; padding-top:calc(12 * var(--u)); border-top:1px solid var(--hair);
+  font-size:max(11.5px, calc(14 * var(--u))); line-height:1.45; color:var(--graphite);
 }
-.mode-card .mode-count b{ color:var(--sig); font-weight:600; font-variant-numeric:tabular-nums; font-size:max(12px, calc(15 * var(--u))); }
-.mode-card.latent{ border-left-color:var(--sig-deep); }
-.mode-card.latent .mode-count b{ color:var(--sig-deep); }
+.nn-cap b{ color:var(--ink); font-weight:600; }
 
 .nn-node{ transition:fill .3s ease; }
 .nn-edge{ transition:stroke .25s ease, stroke-opacity .25s ease; stroke-width:1.1; fill:none; }
-.nn-lbl{ font-family:var(--mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase; }
-#nnChip rect{ fill:#EDEEF2; stroke:var(--sig); }
-#nnChip text{ font-family:var(--mono); font-size:13px; fill:var(--ink); }
-#nnLoop{ stroke:#FF6FAE; stroke-width:2.4; fill:none; stroke-linecap:round; }
-#nnBack{ stroke:var(--sig); stroke-width:1.6; fill:none; stroke-dasharray:6 6; }
+.nn-lbl{ font-family:var(--mono); font-size:12px; letter-spacing:.16em; text-transform:uppercase; }
+.nn-chip rect{ fill:#EDEEF2; stroke:var(--sig); }
+.nn-chip text{ font-family:var(--mono); font-size:13px; fill:var(--ink); }
+.nn-loop{ stroke:#FF6FAE; stroke-width:3.4; fill:none; stroke-linecap:round; }
+.nn-back{ stroke:var(--sig); stroke-width:1.8; fill:none; stroke-dasharray:6 6; }
+/* the recurrence is always there — the flash only shows it firing */
+.nn-guide{ fill:none; stroke-width:1.6; stroke-dasharray:4 7; }
+.nn-guide.paper{ stroke:#B9BDC7; }
+.nn-guide.inner{ stroke:#525C7C; stroke-width:1.9; }
+.nn-guide-lbl{ font-family:var(--mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; }
 
 /* ═══════════ 04 · HOW IT LEARNS ══════════════════════════════ */
 #trsvg{ flex:1 1 auto; min-height:0; width:100%; height:100%; margin-top:calc(14 * var(--u)); }
@@ -326,9 +337,17 @@ body{
 .tr-tx{ font-family:var(--mono); font-size:12px; fill:var(--graphite); }
 .tr-wire{ stroke:var(--hair); stroke-width:1.5; fill:none; }
 .tr-branch{ transition:opacity .7s ease; }
-#trLink{ stroke:var(--sig); stroke-width:1.8; stroke-dasharray:5 5; }
+#trDistill, #trDistillNote, #trLinkGroup{ transition:opacity .5s ease; }
+#trLinkGroup line{ stroke:var(--sig); stroke-width:1.8; stroke-dasharray:5 5; }
+.strip-cell{ transition:fill .25s ease; }
+.strip-tick{ stroke:#FF6FAE; stroke-width:1.3; opacity:0; transition:opacity .2s ease; }
+.strip-tick.on{ opacity:1; }
 .tr-loss{ transition:opacity .4s ease; }
 #trStamp{ transition:opacity .6s ease; }
+.tr-item{ opacity:0; transition:opacity .35s ease; }
+.tr-item.on{ opacity:1; }
+.tr-note{ font-family:var(--sans); font-size:17px; font-weight:500; fill:var(--ink); }
+.tr-note.dim{ font-size:15px; font-weight:400; fill:var(--graphite); }
 
 .tr-strip{
   display:flex; flex-wrap:wrap; gap:calc(40 * var(--u)); align-items:baseline;
@@ -414,7 +433,7 @@ body{
 
 /* ═══════════ navigation rail ═════════════════════════════════ */
 #rail{
-  position:absolute; left:var(--pad-x); right:var(--pad-x); bottom:calc(38 * var(--u)); z-index:50;
+  position:absolute; left:var(--pad-x); right:var(--pad-x); bottom:calc(46 * var(--u)); z-index:50;
   display:grid; grid-template-columns:repeat(5,1fr); gap:0;
   border-top:1px solid var(--hair);
 }
@@ -434,12 +453,22 @@ body{
 .rail-i.cur{ color:var(--ink); }
 .rail-i b{ font-weight:500; margin-right:calc(9 * var(--u)); color:inherit; }
 .rail-i:focus-visible{ outline:2px solid var(--sig); outline-offset:2px; }
-#hint{
-  position:absolute; right:var(--pad-x); bottom:calc(14 * var(--u)); z-index:50;
-  font-family:var(--mono); font-size:max(8px, calc(10 * var(--u)));
-  letter-spacing:.16em; color:var(--graphite-2);
-  text-transform:uppercase; transition:opacity .6s ease;
+#pager{
+  position:absolute; right:var(--pad-x); bottom:calc(9 * var(--u)); z-index:50;
+  display:flex; gap:calc(8 * var(--u));
 }
+.pager-b{
+  appearance:none; cursor:pointer;
+  width:calc(46 * var(--u)); height:calc(28 * var(--u));
+  min-width:36px; min-height:26px;
+  display:grid; place-items:center;
+  background:none; border:1px solid var(--hair); color:var(--graphite);
+  font-family:var(--mono); font-size:max(12px, calc(14 * var(--u))); line-height:1;
+  transition:border-color .2s ease, color .2s ease, opacity .2s ease;
+}
+.pager-b:hover:not(:disabled){ border-color:var(--ink); color:var(--ink); }
+.pager-b:disabled{ opacity:.28; cursor:default; }
+.pager-b:focus-visible{ outline:2px solid var(--sig); outline-offset:2px; }
 
 /* narrow windows: drop to a single column rather than crushing the grids */
 @media (max-width: 900px){
@@ -585,52 +614,82 @@ body{
       <div class="eyebrow rv">Where the thinking lives</div>
       <h2 class="h2 rv" style="animation-delay:.06s">A thought either becomes a word,<br><em>or it stays in the hidden layers.</em></h2>
     </div>
-    <div class="mode-card rv" id="modeCard" style="animation-delay:.12s">
-      <div class="mode-kind" id="modeKind">Mode</div>
-      <div class="mode-name" id="modeName">Explicit chain of thought</div>
-      <div class="mode-desc" id="modeDesc">Every step leaves the network, is decoded into words, and is fed back in as input. You are billed for each one.</div>
-      <div class="mode-count">tokens emitted <b id="modeCount">0</b></div>
+  </div>
+
+  <div class="nn-grid">
+    <!-- the ordinary loop: out through the output layer, back in as words -->
+    <div class="nn-panel rv" style="animation-delay:.14s">
+      <div class="nn-bar">
+        <span class="who">Every other LLM · explicit CoT</span>
+        <span class="count"><b id="countA">0</b><i>reasoning tokens</i></span>
+      </div>
+      <div class="nn-rule"></div>
+      <div class="nn-sub"><b>3 reasoning steps</b> · 27 tokens decoded, emitted, and read back in</div>
+      <svg class="nn-net" id="netA" viewBox="0 0 680 470" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <marker id="arrA" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 z" fill="#E8237E"/>
+          </marker>
+        </defs>
+        <path class="nn-guide paper" d="M 618,184 C 690,20 20,12 62,130"/>
+        <text class="nn-guide-lbl" x="340" y="30" text-anchor="middle" style="fill:#9CA2AF">decoded into words, fed back in</text>
+        <g class="edges"></g>
+        <g class="nodes"></g>
+        <text class="nn-lbl" x="64"  y="440" text-anchor="middle" style="fill:#8B909B">Question</text>
+        <text class="nn-lbl" x="616" y="440" text-anchor="middle" style="fill:#8B909B">Answer</text>
+        <path class="nn-back" id="backA" d="M 618,184 C 690,20 20,12 62,130" opacity="0" marker-end="url(#arrA)"/>
+        <g class="nn-chip" id="chipA" opacity="0">
+          <rect x="-60" y="-16" width="120" height="32" rx="2"/>
+          <text x="0" y="5" text-anchor="middle">40 / 4 = 10</text>
+        </g>
+      </svg>
+      <p class="nn-cap">Every step <b>leaves the network</b>, is decoded into words, and is fed back in as input. You are billed for each one.</p>
+    </div>
+
+    <div class="nn-divider"></div>
+
+    <!-- the latent loop: it never leaves the hidden layers -->
+    <div class="nn-panel it rv" style="animation-delay:.2s">
+      <div class="nn-bar">
+        <span class="who">InnerThink · latent CoT</span>
+        <span class="count"><b id="countB">0</b><i>reasoning tokens</i></span>
+      </div>
+      <div class="nn-rule"></div>
+      <div class="nn-sub"><b>3 reasoning steps</b> · 3 forward passes, 0 tokens decoded</div>
+      <svg class="nn-net" id="netB" viewBox="0 0 680 470" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <linearGradient id="gInB" gradientUnits="userSpaceOnUse" x1="64" y1="0" x2="214" y2="0">
+            <stop offset="0" stop-color="#C4C7D0"/><stop offset="1" stop-color="#2A3348"/>
+          </linearGradient>
+          <linearGradient id="gOutB" gradientUnits="userSpaceOnUse" x1="466" y1="0" x2="616" y2="0">
+            <stop offset="0" stop-color="#2A3348"/><stop offset="1" stop-color="#C4C7D0"/>
+          </linearGradient>
+          <marker id="arrB" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 z" fill="#FF6FAE"/>
+          </marker>
+          <linearGradient id="gVecB" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#2B2AD9"/><stop offset="1" stop-color="#FF3D87"/>
+          </linearGradient>
+        </defs>
+        <g class="edges-in"></g>
+        <rect x="170" y="104" width="352" height="350" rx="3" fill="#07080D"/>
+        <text class="nn-lbl" x="186" y="126" style="fill:#6A7183">Hidden layers</text>
+        <g class="edges"></g>
+        <g class="edges-out"></g>
+        <g class="nodes"></g>
+        <path class="nn-guide inner" d="M 486,390 C 545,445 260,445 214,412"/>
+        <text class="nn-lbl" x="64"  y="440" text-anchor="middle" style="fill:#8B909B">Question</text>
+        <text class="nn-lbl" x="616" y="440" text-anchor="middle" style="fill:#8B909B">Answer</text>
+        <path class="nn-loop" id="loopB" d="M 486,390 C 545,445 260,445 214,412" opacity="0" marker-end="url(#arrB)"/>
+        <g class="nn-vec" id="vecB" opacity="0">
+          <rect x="-34" y="-13" width="68" height="26" rx="13"/>
+        </g>
+      </svg>
+      <p class="nn-cap">The last hidden layer loops <b>straight back to the first</b>. The forward passes still cost compute — they just never cost a token.</p>
     </div>
   </div>
 
-  <svg id="nnsvg" viewBox="0 0 1408 570" preserveAspectRatio="xMidYMid meet">
-    <defs>
-      <linearGradient id="gIn" gradientUnits="userSpaceOnUse" x1="86" y1="0" x2="300" y2="0">
-        <stop offset="0" stop-color="#C4C7D0"/><stop offset="1" stop-color="#2A3348"/>
-      </linearGradient>
-      <linearGradient id="gOut" gradientUnits="userSpaceOnUse" x1="900" y1="0" x2="1230" y2="0">
-        <stop offset="0" stop-color="#2A3348"/><stop offset="1" stop-color="#C4C7D0"/>
-      </linearGradient>
-      <marker id="nah" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-        <path d="M0,0 L8,4 L0,8 z" fill="#E8237E"/>
-      </marker>
-      <marker id="nahl" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-        <path d="M0,0 L8,4 L0,8 z" fill="#FF6FAE"/>
-      </marker>
-    </defs>
-
-    <g id="edgesPaperIn"></g>
-    <rect x="196" y="80" width="880" height="466" rx="3" fill="#07080D"/>
-    <text class="nn-lbl" x="216" y="110" fill="#6A7183">Hidden layers</text>
-    <g id="edgesInner"></g>
-    <g id="edgesPaperOut"></g>
-    <g id="nodes"></g>
-
-    <text class="nn-lbl" x="86"   y="512" text-anchor="middle" fill="#8B909B">Question</text>
-    <text class="nn-lbl" x="1230" y="512" text-anchor="middle" fill="#8B909B">Answer</text>
-
-    <!-- explicit mode: the thought exits, becomes words, comes back -->
-    <path id="nnBack" d="M 1236,206 C 1420,-8 120,-16 80,132" opacity="0" marker-end="url(#nah)"/>
-    <g id="nnChip" opacity="0">
-      <rect x="-62" y="-17" width="124" height="34" rx="2"/>
-      <text x="0" y="5" text-anchor="middle">40 / 4 = 10</text>
-    </g>
-
-    <!-- latent mode: the loop stays inside -->
-    <path id="nnLoop" d="M 924,454 C 1000,540 320,540 276,454" opacity="0" marker-end="url(#nahl)"/>
-  </svg>
-
-  <div class="foot">Layer counts in the diagram are illustrative; CODI-Qwen3-8B runs 36 transformer layers and six latent steps. The recurrence is the last hidden state projected through a 2-layer MLP + LayerNorm and re-entered as the next input embedding.</div>
+  <div class="foot">Five layers stand in for 36 and three reasoning steps for six: CODI-Qwen3-8B runs six latent steps through the full transformer stack, with the recurrence being the last hidden state projected through a 2-layer MLP + LayerNorm. Counts are reasoning tokens only, at ~9 per illustrated step — both sides still emit the answer, and a latent step still costs a forward pass. What it does not cost is a token.</div>
 </section>
 
 <!-- ═════════════ 04 · HOW IT LEARNS ═════════════ -->
@@ -640,7 +699,7 @@ body{
       <div class="eyebrow rv">How it learns</div>
       <h2 class="h2 rv" style="animation-delay:.06s">The words teach the vectors.<br><em>Then the words are thrown away.</em></h2>
     </div>
-    <p class="lede rv" style="animation-delay:.12s; max-width:36ch">Self-distillation: one network runs both branches, and the verbal branch is the only teacher the latent branch ever gets.</p>
+    <p class="lede rv" style="animation-delay:.12s; max-width:38ch">Self-distillation: one network runs both tasks. The student never copies the teacher's words — it copies what those words did to the network inside.</p>
   </div>
 
   <svg id="trsvg" viewBox="0 0 1408 520" preserveAspectRatio="xMidYMid meet">
@@ -663,59 +722,78 @@ body{
     <path class="tr-wire" d="M156,300 C 200,300 200,140 246,140" marker-end="url(#tah)"/>
     <path class="tr-wire" d="M156,336 C 200,336 200,400 246,400" marker-end="url(#tah)"/>
 
-    <!-- teacher branch -->
+    <!-- teacher branch: writes the reasoning out in words -->
     <g class="tr-branch" id="trTeacher">
-      <text class="tr-lbl" x="256" y="106">Teacher · explicit CoT</text>
+      <text class="tr-lbl tr-item" x="256" y="106">Teacher task · explicit CoT</text>
       <g transform="translate(256,122)">
-        <rect class="tr-chip" x="0"   y="0" width="104" height="36" rx="2"/><text class="tr-chip-t" x="52"  y="23" text-anchor="middle">question</text>
-        <rect class="tr-chip" x="116" y="0" width="126" height="36" rx="2"/><text class="tr-chip-t" x="179" y="23" text-anchor="middle">40 / 4 = 10</text>
-        <rect class="tr-chip" x="254" y="0" width="142" height="36" rx="2"/><text class="tr-chip-t" x="325" y="23" text-anchor="middle">40 − 10 = 30</text>
-        <rect class="tr-chip" x="408" y="0" width="152" height="36" rx="2"/><text class="tr-chip-t" x="484" y="23" text-anchor="middle">the answer is</text>
-        <rect id="trMarkT" x="572" y="0" width="32" height="36" rx="2" fill="#FFFFFF" stroke="#E8237E" stroke-width="1.8"/>
-        <text class="tr-chip-t" x="588" y="23" text-anchor="middle">:</text>
-        <rect class="tr-chip" x="616" y="0" width="66" height="36" rx="2"/><text class="tr-chip-t" x="649" y="23" text-anchor="middle">$30</text>
+        <g class="tr-item"><rect class="tr-chip" x="0"   y="0" width="104" height="36" rx="2"/><text class="tr-chip-t" x="52"  y="23" text-anchor="middle">question</text></g>
+        <g class="tr-item"><rect class="tr-chip" x="116" y="0" width="126" height="36" rx="2"/><text class="tr-chip-t" x="179" y="23" text-anchor="middle">40 / 4 = 10</text></g>
+        <g class="tr-item"><rect class="tr-chip" x="254" y="0" width="142" height="36" rx="2"/><text class="tr-chip-t" x="325" y="23" text-anchor="middle">40 − 10 = 30</text></g>
+        <g class="tr-item"><rect class="tr-chip" x="408" y="0" width="152" height="36" rx="2"/><text class="tr-chip-t" x="484" y="23" text-anchor="middle">the answer is</text></g>
+        <g class="tr-item"><rect id="trMarkT" x="572" y="0" width="32" height="36" rx="2" fill="#FFFFFF" stroke="#E8237E" stroke-width="1.8"/><text class="tr-chip-t" x="588" y="23" text-anchor="middle">:</text></g>
+        <g class="tr-item"><rect class="tr-chip" x="616" y="0" width="66" height="36" rx="2"/><text class="tr-chip-t" x="649" y="23" text-anchor="middle">$30</text></g>
       </g>
-      <text class="tr-tx" x="256" y="192" font-size="11.5" style="fill:#8B909B">every step spelled out — 27 tokens of it</text>
+      <text class="tr-tx tr-item" x="256" y="192" font-size="11.5" style="fill:#8B909B">cross-entropy on every word · 27 tokens of reasoning</text>
     </g>
 
-    <!-- student branch -->
+    <!-- student branch: the same question, thought in vectors -->
     <g id="trStudent">
-      <text class="tr-lbl" x="256" y="366" style="fill:#E8237E">Student · latent CoT</text>
+      <text class="tr-lbl tr-item" x="256" y="366" style="fill:#E8237E">Student task · latent CoT</text>
       <g transform="translate(256,382)">
-        <rect class="tr-chip" x="0"   y="0" width="104" height="36" rx="2"/><text class="tr-chip-t" x="52" y="23" text-anchor="middle">question</text>
-        <rect x="116" y="0" width="280" height="36" rx="2" fill="#07080D"/>
-        <text class="tr-lbl-l" x="126" y="23" font-size="10">bot</text>
-        <g id="trDots"></g>
-        <text class="tr-lbl-l" x="372" y="23" font-size="10">eot</text>
-        <rect class="tr-chip" x="408" y="0" width="152" height="36" rx="2"/><text class="tr-chip-t" x="484" y="23" text-anchor="middle">the answer is</text>
-        <rect id="trMarkS" x="572" y="0" width="32" height="36" rx="2" fill="#FFFFFF" stroke="#E8237E" stroke-width="1.8"/>
-        <text class="tr-chip-t" x="588" y="23" text-anchor="middle">:</text>
-        <rect class="tr-chip" x="616" y="0" width="66" height="36" rx="2"/><text class="tr-chip-t" x="649" y="23" text-anchor="middle">$30</text>
+        <g class="tr-item"><rect class="tr-chip" x="0"   y="0" width="104" height="36" rx="2"/><text class="tr-chip-t" x="52" y="23" text-anchor="middle">question</text></g>
+        <g class="tr-item">
+          <rect x="116" y="0" width="280" height="36" rx="2" fill="#07080D"/>
+          <text class="tr-lbl-l" x="126" y="23" font-size="10">bot</text>
+          <g id="trDots"></g>
+          <text class="tr-lbl-l" x="372" y="23" font-size="10">eot</text>
+        </g>
+        <g class="tr-item"><rect class="tr-chip" x="408" y="0" width="152" height="36" rx="2"/><text class="tr-chip-t" x="484" y="23" text-anchor="middle">the answer is</text></g>
+        <g class="tr-item"><rect id="trMarkS" x="572" y="0" width="32" height="36" rx="2" fill="#FFFFFF" stroke="#E8237E" stroke-width="1.8"/><text class="tr-chip-t" x="588" y="23" text-anchor="middle">:</text></g>
+        <g class="tr-item"><rect class="tr-chip" x="616" y="0" width="66" height="36" rx="2"/><text class="tr-chip-t" x="649" y="23" text-anchor="middle">$30</text></g>
       </g>
-      <text class="tr-tx" x="256" y="452" font-size="11.5" style="fill:#8B909B">six vectors — 0 tokens of it</text>
+      <text class="tr-tx tr-item" x="256" y="452" font-size="11.5" style="fill:#8B909B">cross-entropy on the answer only · 0 tokens of reasoning</text>
     </g>
 
-    <!-- the distillation link -->
-    <line id="trLink" x1="844" y1="166" x2="844" y2="374" opacity="0"/>
-    <circle id="trDot" cx="844" cy="166" r="5" fill="#E8237E" opacity="0"/>
-    <text id="trLinkLbl" class="tr-tx" x="864" y="266" font-size="11.5" opacity="0">L1 on the normalised hidden state of the token</text>
-    <text id="trLinkLbl2" class="tr-tx" x="864" y="284" font-size="11.5" opacity="0">before the answer · stop-gradient on the teacher</text>
+    <!-- the distillation: not the answer, but the whole layer stack at one token -->
+    <g id="trLinkGroup" opacity="0">
+      <line id="trLink"  x1="844" y1="158" x2="844" y2="197"/>
+      <line id="trLink2" x1="844" y1="343" x2="844" y2="382"/>
+    </g>
+
+    <g id="trDistill" opacity="0">
+      <rect x="640" y="197" width="408" height="146" rx="3" fill="#07080D"/>
+      <text class="tr-lbl-l" x="656" y="217">Teacher · hidden state at this token</text>
+      <g id="stripT"></g>
+      <g id="stripTicks"></g>
+      <g id="stripS"></g>
+      <text class="tr-lbl-l" x="656"  y="321">Student</text>
+      <text class="tr-lbl-l" x="1032" y="321" text-anchor="end">layer 1 → 36</text>
+    </g>
+
+    <g id="trDistillNote" opacity="0">
+      <text class="tr-lbl" x="1080" y="221" style="fill:#E8237E">L1 at every layer</text>
+      <text class="tr-note dim" x="1080" y="251">Writing the reasoning out shifts the teacher's</text>
+      <text class="tr-note dim" x="1080" y="273">whole stack at this token. The student has to</text>
+      <text class="tr-note dim" x="1080" y="295">reproduce that shift without writing anything.</text>
+      <text class="tr-lbl" x="1080" y="329">stop-gradient on the teacher</text>
+    </g>
 
     <!-- objective -->
-    <g transform="translate(1120,116)">
+    <g transform="translate(0,396)">
       <text class="tr-lbl" x="0" y="0">Objective</text>
       <g class="tr-tx" font-size="12.5">
-        <text class="tr-loss" id="loss1" x="0" y="32" opacity=".18">ℒ<tspan font-size="10" dy="3">teacher</tspan><tspan dy="-3" fill="#8B909B">  CE on the words</tspan></text>
-        <text class="tr-loss" id="loss2" x="0" y="62" opacity=".18">ℒ<tspan font-size="10" dy="3">student</tspan><tspan dy="-3" fill="#8B909B">  CE on the answer</tspan></text>
-        <text class="tr-loss" id="loss3" x="0" y="92" opacity=".18">ℒ<tspan font-size="10" dy="3">distill</tspan><tspan dy="-3" fill="#8B909B">     L1 between the two</tspan></text>
+        <text class="tr-loss" id="loss1" x="0" y="28" opacity=".18">ℒ<tspan font-size="10" dy="3">teacher</tspan><tspan dy="-3" style="fill:#8B909B">  CE on the words</tspan></text>
+        <text class="tr-loss" id="loss2" x="0" y="56" opacity=".18">ℒ<tspan font-size="10" dy="3">student</tspan><tspan dy="-3" style="fill:#8B909B">  CE on the answer</tspan></text>
+        <text class="tr-loss" id="loss3" x="0" y="84" opacity=".18">ℒ<tspan font-size="10" dy="3">distill</tspan><tspan dy="-3" style="fill:#8B909B">  L1 across all layers</tspan></text>
       </g>
     </g>
 
-    <!-- the closing beat: the teacher branch is dropped -->
+    <!-- last beat: what survives training -->
     <g id="trStamp" opacity="0">
-      <text x="256" y="150" font-family="Bricolage Grotesque, Archivo, sans-serif" font-size="40" font-weight="600" fill="#0E1015" letter-spacing="-1">Same answers.</text>
-      <text x="256" y="196" font-family="Bricolage Grotesque, Archivo, sans-serif" font-size="40" font-weight="600" fill="#8B909B" letter-spacing="-1">None of the words.</text>
-      <text class="tr-lbl" x="700" y="196" style="fill:#E8237E">teacher branch not run at inference</text>
+      <text class="tr-lbl" x="256" y="112" style="fill:#E8237E">At inference</text>
+      <text class="tr-note" x="256" y="148">Only the student task runs.</text>
+      <text class="tr-note dim" x="256" y="176">The teacher existed to produce one hidden state for the</text>
+      <text class="tr-note dim" x="256" y="200">student to match. It is never executed when the model answers.</text>
     </g>
   </svg>
 
@@ -1020,32 +1098,33 @@ function runS2(){
 }
 document.getElementById("replay2").addEventListener("click", runS2);
 
-/* ══ 03 · where the thinking lives ════════════════════════════ */
-const NN = {
-  inX: 86, outX: 1230, hx: [300, 500, 700, 900],
-  cy: [158, 232, 306, 380, 454], outCy: [232, 306, 380], r: 24, rOut: 22
+/* ══ 03 · where the thinking lives ════════════════════════════
+   Two five-layer networks side by side: one input layer, three
+   hidden, one output. Only the latent one gets an aperture. */
+const NET = {
+  inX: 64, hx: [214, 340, 466], outX: 616,
+  cy: [150, 210, 270, 330, 390], outCy: [210, 270, 330], r: 19, rOut: 17
 };
-const nnNodes = [];   // nnNodes[layer][i] — layer 0 = input, 1..4 hidden, 5 = output
-const nnEdges = [];   // nnEdges[g] — g 0..4
 
-(function buildNN(){
-  const gIn = document.getElementById("edgesPaperIn");
-  const gInner = document.getElementById("edgesInner");
-  const gOut = document.getElementById("edgesPaperOut");
-  const gNodes = document.getElementById("nodes");
-
+function buildNet(svg, dark){
   const cols = [
-    { x: NN.inX,     ys: NN.cy,    r: NN.r    },
-    { x: NN.hx[0],   ys: NN.cy,    r: NN.r    },
-    { x: NN.hx[1],   ys: NN.cy,    r: NN.r    },
-    { x: NN.hx[2],   ys: NN.cy,    r: NN.r    },
-    { x: NN.hx[3],   ys: NN.cy,    r: NN.r    },
-    { x: NN.outX,    ys: NN.outCy, r: NN.rOut }
+    { x: NET.inX,   ys: NET.cy,     r: NET.r    },
+    { x: NET.hx[0], ys: NET.cy,     r: NET.r    },
+    { x: NET.hx[1], ys: NET.cy,     r: NET.r    },
+    { x: NET.hx[2], ys: NET.cy,     r: NET.r    },
+    { x: NET.outX,  ys: NET.outCy,  r: NET.rOut }
   ];
+  const hostIn  = svg.querySelector(".edges-in")  || svg.querySelector(".edges");
+  const hostMid = svg.querySelector(".edges");
+  const hostOut = svg.querySelector(".edges-out") || svg.querySelector(".edges");
+  const hostNodes = svg.querySelector(".nodes");
+  const edges = [], nodes = [];
 
-  for(let g=0; g<5; g++){
-    const host = g === 0 ? gIn : (g === 4 ? gOut : gInner);
-    const stroke = g === 0 ? "url(#gIn)" : (g === 4 ? "url(#gOut)" : "#232B3D");
+  for(let g=0; g<4; g++){
+    const host   = g === 0 ? hostIn : (g === 3 ? hostOut : hostMid);
+    const stroke = dark
+      ? (g === 0 ? "url(#gInB)" : (g === 3 ? "url(#gOutB)" : "#232B3D"))
+      : "#C4C7D0";
     const bag = [];
     cols[g].ys.forEach(function(y1){
       cols[g+1].ys.forEach(function(y2){
@@ -1054,13 +1133,14 @@ const nnEdges = [];   // nnEdges[g] — g 0..4
         l.setAttribute("x2", cols[g+1].x); l.setAttribute("y2", y2);
         l.setAttribute("class", "nn-edge");
         l.setAttribute("stroke", stroke);
-        l.setAttribute("stroke-opacity", g === 0 || g === 4 ? ".7" : ".55");
+        l.setAttribute("stroke-opacity", ".6");
         l.dataset.base = stroke;
+        l.dataset.hot  = dark ? rampCss(0.34 + g*0.13) : "#0E1015";
         host.appendChild(l);
         bag.push(l);
       });
     });
-    nnEdges.push(bag);
+    edges.push(bag);
   }
 
   cols.forEach(function(col, li){
@@ -1069,141 +1149,146 @@ const nnEdges = [];   // nnEdges[g] — g 0..4
       const c = document.createElementNS(svgNS, "circle");
       c.setAttribute("cx", col.x); c.setAttribute("cy", y); c.setAttribute("r", col.r);
       c.setAttribute("class", "nn-node");
-      const base = li === 0 ? "#0E1015" : (li === 5 ? "#C4C7D0" : "#151C2A");
+      let base, lit;
+      if(li === 0){ base = "#0E1015"; lit = "#0E1015"; }
+      else if(li === 4){ base = dark ? "#C4C7D0" : "#C4C7D0"; lit = "#0E1015"; }
+      else if(dark){ base = "#151C2A"; lit = rampCss(0.30 + 0.46 * (((i*0.41 + li*0.29) % 1))); }
+      else { base = "#C4C7D0"; lit = "#5B616E"; }
       c.setAttribute("fill", base);
-      c.dataset.base = base;
-      c.dataset.lit = li === 0 ? "#0E1015" : (li === 5 ? "#0E1015" : rampCss(0.30 + 0.46 * (((i*0.41 + li*0.23) % 1))));
-      gNodes.appendChild(c);
+      c.dataset.base = base; c.dataset.lit = lit;
+      hostNodes.appendChild(c);
       bag.push(c);
     });
-    nnNodes.push(bag);
+    nodes.push(bag);
   });
-})();
 
-const nnBack = document.getElementById("nnBack");
-const nnChip = document.getElementById("nnChip");
-const nnChipTx = nnChip.querySelector("text");
-const nnLoop = document.getElementById("nnLoop");
-const modeCard = document.getElementById("modeCard");
-const modeKind = document.getElementById("modeKind");
-const modeName = document.getElementById("modeName");
-const modeDesc = document.getElementById("modeDesc");
-const modeCount = document.getElementById("modeCount");
+  return { edges: edges, nodes: nodes };
+}
+
+const netA = buildNet(document.getElementById("netA"), false);
+const netB = buildNet(document.getElementById("netB"), true);
+
+const backA = document.getElementById("backA");
+const chipA = document.getElementById("chipA");
+const chipATx = chipA.querySelector("text");
+const loopB = document.getElementById("loopB");
+const vecB = document.getElementById("vecB");
+const countA = document.getElementById("countA");
+const countB = document.getElementById("countB");
 
 const t3 = Timers();
-let s3raf = null;
-function s3clear(){ t3.clear(); if(s3raf) cancelAnimationFrame(s3raf); s3raf = null; }
+let s3rafs = [];
+function s3clear(){ t3.clear(); s3rafs.forEach(cancelAnimationFrame); s3rafs = []; }
 
-function nnReset(){
-  nnEdges.forEach(function(bag){
+function netReset(net){
+  net.edges.forEach(function(bag){
     bag.forEach(function(l){
       l.setAttribute("stroke", l.dataset.base);
-      l.setAttribute("stroke-opacity", ".55");
+      l.setAttribute("stroke-opacity", ".6");
     });
   });
-  nnNodes.forEach(function(bag){ bag.forEach(function(c){ c.setAttribute("fill", c.dataset.base); }); });
-  nnBack.setAttribute("opacity", 0);
-  nnChip.setAttribute("opacity", 0);
-  nnLoop.setAttribute("opacity", 0);
+  net.nodes.forEach(function(bag){ bag.forEach(function(c){ c.setAttribute("fill", c.dataset.base); }); });
 }
-function nnFire(g){
-  nnEdges[g].forEach(function(l){
-    l.setAttribute("stroke", g === 0 || g === 4 ? "#E8237E" : rampCss(0.34 + g*0.11));
+function netFire(net, g){
+  if(!net.edges[g]) return;
+  net.edges[g].forEach(function(l){
+    l.setAttribute("stroke", l.dataset.hot);
     l.setAttribute("stroke-opacity", "1");
   });
-  nnNodes[g+1].forEach(function(c){ c.setAttribute("fill", c.dataset.lit); });
+  net.nodes[g+1].forEach(function(c){ c.setAttribute("fill", c.dataset.lit); });
   t3.add(function(){
-    nnEdges[g].forEach(function(l){
+    net.edges[g].forEach(function(l){
       l.setAttribute("stroke", l.dataset.base);
-      l.setAttribute("stroke-opacity", ".55");
+      l.setAttribute("stroke-opacity", ".6");
     });
-  }, 380);
+  }, 340);
 }
 
-/* move an element along a path */
+/* move an element along a path — both panels run one of these at a time,
+   so each traveller keeps its own rAF slot */
 function travel(pathEl, el, dur, done){
   const len = pathEl.getTotalLength();
   const t0 = performance.now();
+  const slot = s3rafs.length;
+  s3rafs.push(0);
   function tick(now){
     const p = Math.min(1, (now - t0) / dur);
     const pt = pathEl.getPointAtLength(len * p);
     el.setAttribute("transform", "translate(" + pt.x + "," + pt.y + ")");
-    if(p < 1){ s3raf = requestAnimationFrame(tick); }
+    if(p < 1){ s3rafs[slot] = requestAnimationFrame(tick); }
     else if(done) done();
   }
-  s3raf = requestAnimationFrame(tick);
+  s3rafs[slot] = requestAnimationFrame(tick);
 }
 
 const EXPLICIT_STEPS = ["40 / 4 = 10", "40 − 10 = 30", "0.75 × 40 = 30"];
-
-function setMode(latent){
-  modeCard.classList.toggle("latent", latent);
-  modeKind.textContent = latent ? "Mode · InnerThink" : "Mode · every other LLM";
-  modeName.textContent = latent ? "Latent chain of thought" : "Explicit chain of thought";
-  modeDesc.textContent = latent
-    ? "The last hidden layer loops straight back to the first. Six thoughts happen, none of them are ever decoded."
-    : "Every step leaves the network, is decoded into words, and is fed back in as input. You are billed for each one.";
-  modeCount.textContent = "0";
-}
+const TOKENS_PER_STEP = 9;
 
 function runS3(){
-  s3clear(); nnReset();
+  s3clear();
+  netReset(netA); netReset(netB);
+  backA.setAttribute("opacity", 0);
+  chipA.setAttribute("opacity", 0);
+  loopB.setAttribute("opacity", 0);
+  vecB.setAttribute("opacity", 0);
+  countA.textContent = "0";
+  countB.textContent = "0";
+
   if(REDUCED){
-    setMode(true);
-    nnNodes.forEach(function(bag,li){ if(li>0&&li<5) bag.forEach(function(c){ c.setAttribute("fill", c.dataset.lit); }); });
-    nnLoop.setAttribute("opacity", 1);
-    modeCount.textContent = "0";
+    [netA, netB].forEach(function(n){
+      n.nodes.forEach(function(bag, li){ if(li > 0 && li < 4) bag.forEach(function(c){ c.setAttribute("fill", c.dataset.lit); }); });
+    });
+    loopB.setAttribute("opacity", 1);
+    countA.textContent = EXPLICIT_STEPS.length * TOKENS_PER_STEP;
     return;
   }
-  explicitPass(0, 0);
+  round(0);
 }
 
-/* ── mode A: the thought exits as words and comes back ── */
-function explicitPass(i, emitted){
-  if(i === 0) setMode(false);
-  for(let g=0; g<4; g++) t3.add(function(){ nnFire(g); }, g*120);
+/* one reasoning step, run on both networks at once. The two travellers use
+   the same path-following animation and the same duration — the only
+   difference is where the path goes, and what the traveller is carrying. */
+const TRAVEL_MS = 820, TRAVEL_AT = 470;
+
+function round(i){
+  // both push a pass through the hidden layers
+  for(let g=0; g<3; g++){
+    t3.add(function(){ netFire(netA, g); netFire(netB, g); }, g*110);
+  }
+
+  // left only: the thought carries on into the output layer to be decoded
+  t3.add(function(){ netFire(netA, 3); }, 330);
 
   t3.add(function(){
-    nnChipTx.textContent = EXPLICIT_STEPS[i];
-    nnChip.setAttribute("opacity", 1);
-    nnBack.setAttribute("opacity", 1);
-    travel(nnBack, nnChip, 950, function(){
-      nnChip.setAttribute("opacity", 0);
-      nnBack.setAttribute("opacity", 0);
-      const total = emitted + 9;
-      modeCount.textContent = total;
-      if(i < EXPLICIT_STEPS.length - 1){
-        t3.add(function(){ explicitPass(i+1, total); }, 260);
-      }else{
-        t3.add(function(){ finalPass(total, false); }, 300);
-      }
+    // left — a word leaves the network and comes back as input
+    chipATx.textContent = EXPLICIT_STEPS[i];
+    chipA.setAttribute("opacity", 1);
+    backA.setAttribute("opacity", 1);
+    travel(backA, chipA, TRAVEL_MS, function(){
+      chipA.setAttribute("opacity", 0);
+      backA.setAttribute("opacity", 0);
+      countA.textContent = (i + 1) * TOKENS_PER_STEP;
     });
-  }, 520);
-}
 
-/* ── mode B: the loop never leaves the aperture ── */
-function latentPass(i){
-  if(i === 0) setMode(true);
-  for(let g=0; g<3; g++) t3.add(function(){ nnFire(g); }, g*110);
+    // right — a vector takes the same trip, inside the hidden layers
+    vecB.setAttribute("opacity", 1);
+    loopB.setAttribute("opacity", 1);
+    travel(loopB, vecB, TRAVEL_MS, function(){
+      vecB.setAttribute("opacity", 0);
+      loopB.setAttribute("opacity", 0);
+      countB.textContent = "0";
+    });
+  }, TRAVEL_AT);
 
-  t3.add(function(){
-    nnLoop.setAttribute("opacity", 1);
-    nnLoop.style.strokeDasharray = "26 700";
-    nnLoop.animate([{ strokeDashoffset: 0 }, { strokeDashoffset: -740 }],
-      { duration: 420, easing: "cubic-bezier(.35,0,.5,1)" });
-    modeCount.textContent = "0";
-    t3.add(function(){ nnLoop.setAttribute("opacity", 0); }, 430);
-    if(i < 5) t3.add(function(){ latentPass(i+1); }, 470);
-    else t3.add(function(){ finalPass(0, true); }, 520);
-  }, 360);
-}
-
-function finalPass(count, latent){
-  for(let g=0; g<5; g++) t3.add(function(){ nnFire(g); }, g*110);
-  t3.add(function(){
-    modeCount.textContent = latent ? "0" : count;
-    t3.add(latent ? function(){ explicitPass(0, 0); } : function(){ latentPass(0); }, 1400);
-  }, 620);
+  const NEXT = 1500;
+  if(i < EXPLICIT_STEPS.length - 1){
+    t3.add(function(){ round(i+1); }, NEXT);
+  }else{
+    t3.add(function(){
+      netFire(netB, 3);              // only now does the latent side emit anything
+      t3.add(function(){ runS3(); }, 1900);
+    }, NEXT);
+  }
 }
 
 /* ══ 04 · how it learns ═══════════════════════════════════════ */
@@ -1223,80 +1308,144 @@ function finalPass(count, latent){
     d.dataset.lit = rampCss(0.30 + i*0.11);
     dots.appendChild(d);
   }
+
+  /* one cell per transformer layer, for the token before the answer.
+     The teacher's profile is the target; the student's has to match it
+     layer by layer — that is what the distillation loss is on. */
+  const L = 36, SX = 656, SW = 376, GAP = 1;
+  const CW = (SW - GAP*(L-1)) / L;
+  const stripT = document.getElementById("stripT");
+  const stripS = document.getElementById("stripS");
+  const ticks  = document.getElementById("stripTicks");
+  for(let i=0;i<L;i++){
+    const x = SX + i*(CW + GAP);
+    const v = 0.22 + 0.62 * (Math.sin(i*0.42) * 0.35 + Math.sin(i*0.17 + 1.1) * 0.4 + 0.5);
+
+    const t = document.createElementNS(svgNS,"rect");
+    t.setAttribute("x", x); t.setAttribute("y", 225);
+    t.setAttribute("width", CW); t.setAttribute("height", 24);
+    t.setAttribute("class", "strip-cell"); t.setAttribute("fill", "#12151F");
+    t.dataset.lit = rampCss(v);
+    stripT.appendChild(t);
+
+    const s = document.createElementNS(svgNS,"rect");
+    s.setAttribute("x", x); s.setAttribute("y", 277);
+    s.setAttribute("width", CW); s.setAttribute("height", 24);
+    s.setAttribute("class", "strip-cell"); s.setAttribute("fill", "#12151F");
+    s.dataset.lit = rampCss(v);
+    stripS.appendChild(s);
+
+    const k = document.createElementNS(svgNS,"line");
+    k.setAttribute("x1", x + CW/2); k.setAttribute("y1", 249);
+    k.setAttribute("x2", x + CW/2); k.setAttribute("y2", 277);
+    k.setAttribute("class", "strip-tick");
+    ticks.appendChild(k);
+  }
 })();
 
 const trDots = Array.prototype.slice.call(document.querySelectorAll("#trDots circle"));
 const trTeacher = document.getElementById("trTeacher");
 const trPulse = document.getElementById("trPulse");
-const trLink = document.getElementById("trLink");
-const trDot = document.getElementById("trDot");
-const trLinkLbl = document.getElementById("trLinkLbl");
-const trLinkLbl2 = document.getElementById("trLinkLbl2");
+const trLinkGroup = document.getElementById("trLinkGroup");
+const trDistill = document.getElementById("trDistill");
+const trDistillNote = document.getElementById("trDistillNote");
+const cellsT = Array.prototype.slice.call(document.querySelectorAll("#stripT rect"));
+const cellsS = Array.prototype.slice.call(document.querySelectorAll("#stripS rect"));
+const cellTicks = Array.prototype.slice.call(document.querySelectorAll("#stripTicks line"));
 const trStamp = document.getElementById("trStamp");
 const trLosses = [document.getElementById("loss1"), document.getElementById("loss2"), document.getElementById("loss3")];
 
 const t4 = Timers();
 function s4clear(){ t4.clear(); }
 
+const trTeacherItems = Array.prototype.slice.call(document.querySelectorAll("#trTeacher .tr-item"));
+const trStudentItems = Array.prototype.slice.call(document.querySelectorAll("#trStudent .tr-item"));
+
+/* The slide walks the method in the order it happens:
+   the teacher writes its reasoning out, the student runs the same
+   question in vectors, then one hidden state is matched between them. */
 function runS4(){
   s4clear();
   trTeacher.style.opacity = "1";
+  trTeacherItems.concat(trStudentItems).forEach(function(el){ el.classList.remove("on"); });
   trDots.forEach(function(d){ d.setAttribute("fill", "#1E2536"); });
   trLosses.forEach(function(l){ l.setAttribute("opacity", ".18"); });
-  trLink.setAttribute("opacity", 0);
-  trDot.setAttribute("opacity", 0);
-  trLinkLbl.setAttribute("opacity", 0);
-  trLinkLbl2.setAttribute("opacity", 0);
+  cellsT.concat(cellsS).forEach(function(c){ c.setAttribute("fill", "#12151F"); });
+  cellTicks.forEach(function(k){ k.classList.remove("on"); });
+  trLinkGroup.setAttribute("opacity", 0);
+  trDistill.setAttribute("opacity", 0);
+  trDistillNote.setAttribute("opacity", 0);
   trStamp.setAttribute("opacity", 0);
   trPulse.setAttribute("opacity", 0);
 
   if(REDUCED){
+    trTeacherItems.concat(trStudentItems).forEach(function(el){ el.classList.add("on"); });
     trDots.forEach(function(d){ d.setAttribute("fill", d.dataset.lit); });
     trLosses.forEach(function(l){ l.setAttribute("opacity", 1); });
-    trLink.setAttribute("opacity", 1);
-    trLinkLbl.setAttribute("opacity", 1); trLinkLbl2.setAttribute("opacity", 1);
+    cellsT.concat(cellsS).forEach(function(c){ c.setAttribute("fill", c.dataset.lit); });
+    cellTicks.forEach(function(k){ k.classList.add("on"); });
+    trLinkGroup.setAttribute("opacity", 1);
+    trDistill.setAttribute("opacity", 1);
+    trDistillNote.setAttribute("opacity", 1);
     return;
   }
 
-  // one network fires
+  // 1 · one network, fed the same question twice
   t4.add(function(){
     trPulse.setAttribute("opacity", 1);
     trPulse.animate([{ transform:"translateY(0)" }, { transform:"translateY(-72px)" }],
       { duration:420, easing:"cubic-bezier(.4,0,.2,1)", fill:"forwards" });
-  }, 300);
-  t4.add(function(){ trPulse.setAttribute("opacity", 0); }, 760);
+  }, 260);
+  t4.add(function(){ trPulse.setAttribute("opacity", 0); }, 720);
 
-  // the distillation link
-  t4.add(function(){
-    trLink.setAttribute("opacity", 1);
-    trLinkLbl.setAttribute("opacity", 1);
-    trLinkLbl2.setAttribute("opacity", 1);
-  }, 1100);
-
-  for(let k=0;k<3;k++){
-    t4.add(function(){
-      trDot.setAttribute("opacity", 1);
-      trDot.animate([{ transform:"translateY(0)" }, { transform:"translateY(208px)" }],
-        { duration: 820, easing: "cubic-bezier(.5,0,.5,1)" });
-    }, 1400 + k*900);
-    // each pass, one more latent vector learns what the words knew
-    t4.add(function(){
-      trDots.forEach(function(d, i){
-        t4.add(function(){ d.setAttribute("fill", d.dataset.lit); }, i*70);
-      });
-    }, 2100 + k*900);
-  }
-
-  trLosses.forEach(function(l, i){
-    t4.add(function(){ l.setAttribute("opacity", 1); }, 1600 + i*420);
+  // 2 · the teacher spells the reasoning out
+  trTeacherItems.forEach(function(el, i){
+    t4.add(function(){ el.classList.add("on"); }, 700 + i*110);
   });
 
-  // the closing beat: at inference the teacher is gone
+  // 3 · the student runs the same question, in vectors
+  trStudentItems.forEach(function(el, i){
+    t4.add(function(){ el.classList.add("on"); }, 1560 + i*110);
+  });
+
+  // 4 · zoom in on the token before the answer: its whole layer stack
   t4.add(function(){
-    trTeacher.style.opacity = ".08";
+    trLinkGroup.setAttribute("opacity", 1);
+    trDistill.setAttribute("opacity", 1);
+  }, 2320);
+
+  // the teacher's profile — the shift that writing the reasoning out produced
+  cellsT.forEach(function(c, i){
+    t4.add(function(){ c.setAttribute("fill", c.dataset.lit); }, 2560 + i*22);
+  });
+  t4.add(function(){ trDistillNote.setAttribute("opacity", 1); }, 3100);
+
+  // the student has to reproduce it layer by layer — that is the loss
+  cellsS.forEach(function(c, i){
+    t4.add(function(){
+      cellTicks[i].classList.add("on");
+      c.setAttribute("fill", c.dataset.lit);
+    }, 3500 + i*38);
+  });
+  // as the stack aligns, the latent vectors start carrying what the words carried
+  trDots.forEach(function(d, i){
+    t4.add(function(){ d.setAttribute("fill", d.dataset.lit); }, 3700 + i*205);
+  });
+
+  // 5 · the three losses that make it work
+  trLosses.forEach(function(l, i){
+    t4.add(function(){ l.setAttribute("opacity", 1); }, 2600 + i*380);
+  });
+
+  // 6 · what survives training — the teacher and the whole distillation go away
+  t4.add(function(){
+    trTeacher.style.opacity = ".10";
+    trLinkGroup.setAttribute("opacity", 0);
+    trDistill.setAttribute("opacity", 0);
+    trDistillNote.setAttribute("opacity", 0);
     trStamp.setAttribute("opacity", 1);
-  }, 5200);
-  t4.add(runS4, 9200);
+  }, 6100);
+  t4.add(runS4, 10600);
 }
 
 /* ══ canvases ═════════════════════════════════════════════════ */

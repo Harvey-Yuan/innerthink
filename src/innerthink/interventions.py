@@ -33,6 +33,7 @@ class LatentStepMetrics:
     step: int
     l2_norm: float
     cosine_from_previous: float | None
+    activation_bins: list[float]
 
     def to_dict(self) -> dict[str, float | int | None]:
         return asdict(self)
@@ -50,6 +51,12 @@ class RecordingHook:
         transformed = self.inner(step, latent)
         current = transformed.detach().float().reshape(transformed.shape[0], -1).cpu()
         norm = torch.linalg.vector_norm(current, dim=-1).mean().item()
+        bin_count = min(64, current.shape[-1])
+        usable_width = (current.shape[-1] // bin_count) * bin_count
+        grouped = current[:, :usable_width].reshape(current.shape[0], bin_count, -1)
+        group_means = grouped.mean(dim=-1).mean(dim=0)
+        standardized = (group_means - group_means.mean()) / (group_means.std(unbiased=False) + 1e-6)
+        activation_bins = [round(value, 4) for value in standardized.clamp(-3, 3).tolist()]
         cosine = None
         if self._previous is not None:
             cosine = F.cosine_similarity(current, self._previous, dim=-1).mean().item()
@@ -58,6 +65,7 @@ class RecordingHook:
                 step=step,
                 l2_norm=round(norm, 6),
                 cosine_from_previous=None if cosine is None else round(cosine, 6),
+                activation_bins=activation_bins,
             )
         )
         self._previous = current
